@@ -1,21 +1,40 @@
-import React from 'react';
-import './App.css';
+// Menu.tsx
+import React, { useEffect, useState } from 'react';
 
-const Menu: React.FC = () => {
-  const items: string[] = ['Burger', 'Pasta', 'Pizza', 'Salad'];
+interface MenuItem {
+  name: string;
+  price: number;
+}
 
-  const handleOrder = (item: string) => {
-    alert(`You selected: ${item}`);
-  };
+interface MenuProps {
+  addToCart: (item: MenuItem) => void;
+}
+
+const Menu: React.FC<MenuProps> = ({ addToCart }) => {
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+
+  useEffect(() => {
+    const fetchMenuItems = async () => {
+      try {
+        const response = await fetch('/mockData.json');
+        const data = await response.json();
+        setMenuItems(data.menu);
+      } catch (error) {
+        console.error("Error fetching menu:", error);
+      }
+    };
+    
+    fetchMenuItems();
+  }, []);
 
   return (
     <div className="menu">
       <h2>Menu</h2>
       <ul>
-        {items.map((item, index) => (
+        {menuItems.map((item, index) => (
           <li key={index}>
-            {item} 
-            <button onClick={() => handleOrder(item)}>Order</button>
+            {item.name} - ${item.price.toFixed(2)}
+            <button onClick={() => addToCart(item)}>Add to Order</button>
           </li>
         ))}
       </ul>

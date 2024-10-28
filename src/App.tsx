@@ -1,11 +1,21 @@
+// App.tsx
 import React, { useState } from 'react';
 import './App.css';
 import Menu from './Menu';
+import Cart from './Cart';
+
+interface CartItem {
+  name: string;
+  price: number;
+  quantity: number;
+}
 
 const App: React.FC = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [isViewingCart, setIsViewingCart] = useState<boolean>(false);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   const handleLogin = () => {
     if (username === 'harry' && password === 'diner') {
@@ -13,6 +23,25 @@ const App: React.FC = () => {
     } else {
       alert('Invalid username or password');
     }
+  };
+
+  const addToCart = (item: { name: string; price: number }) => {
+    setCartItems((prevCartItems) => {
+      const existingItem = prevCartItems.find(cartItem => cartItem.name === item.name);
+      if (existingItem) {
+        return prevCartItems.map(cartItem =>
+          cartItem.name === item.name
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        );
+      } else {
+        return [...prevCartItems, { ...item, quantity: 1 }];
+      }
+    });
+  };
+
+  const clearCart = () => {
+    setCartItems([]);
   };
 
   return (
@@ -34,8 +63,18 @@ const App: React.FC = () => {
           />
           <button onClick={handleLogin}>Login</button>
         </div>
+      ) : isViewingCart ? (
+        <>
+          <button onClick={() => setIsViewingCart(false)} className="back-arrow">
+            ← Back to Menu
+          </button>
+          <Cart cartItems={cartItems} clearCart={clearCart} />
+        </>
       ) : (
-        <Menu />
+        <>
+          <Menu addToCart={addToCart} />
+          <button onClick={() => setIsViewingCart(true)}>View Cart</button>
+        </>
       )}
     </div>
   );
