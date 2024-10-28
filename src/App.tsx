@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import './App.css';
 import Menu from './Menu';
 import Cart from './Cart';
+import LaunchPad from './Launchpad.tsx';
+import Inventory from './Inventory';
 
 interface CartItem {
   name: string;
@@ -10,11 +12,13 @@ interface CartItem {
   quantity: number;
 }
 
+type View = 'launchPad' | 'menu' | 'inventory' | 'cart';
+
 const App: React.FC = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  const [isViewingCart, setIsViewingCart] = useState<boolean>(false);
+  const [currentView, setCurrentView] = useState<View>('launchPad');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   const handleLogin = () => {
@@ -63,17 +67,27 @@ const App: React.FC = () => {
           />
           <button onClick={handleLogin}>Login</button>
         </div>
-      ) : isViewingCart ? (
+      ) : currentView === 'launchPad' ? (
+        <LaunchPad 
+          goToMenu={() => setCurrentView('menu')}
+          goToInventory={() => setCurrentView('inventory')}
+        />
+      ) : currentView === 'menu' ? (
         <>
-          <button onClick={() => setIsViewingCart(false)} className="back-arrow">
+          <button onClick={() => setCurrentView('launchPad')} className="back-arrow">
+            ← Back to Launch Pad
+          </button>
+          <Menu addToCart={addToCart} />
+          <button onClick={() => setCurrentView('cart')}>View Cart</button>
+        </>
+      ) : currentView === 'inventory' ? (
+        <Inventory goBack={() => setCurrentView('launchPad')} />
+      ) : (
+        <>
+          <button onClick={() => setCurrentView('menu')} className="back-arrow">
             ← Back to Menu
           </button>
           <Cart cartItems={cartItems} clearCart={clearCart} />
-        </>
-      ) : (
-        <>
-          <Menu addToCart={addToCart} />
-          <button onClick={() => setIsViewingCart(true)}>View Cart</button>
         </>
       )}
     </div>
