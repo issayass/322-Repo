@@ -1,0 +1,11 @@
+// inventory.prisma
+
+model Inventory {
+  id             Int          @id @default(autoincrement())
+  ingredientID   String       @unique
+  name           String
+  quantity       Int
+  unitPrice      Float
+  expirationDate DateTime
+  ingredients    Ingredient[]
+}

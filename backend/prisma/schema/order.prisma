@@ -1,0 +1,15 @@
+// order.prisma
+
+model Order {
+  id                  Int           @id @default(autoincrement())
+  orderDate           DateTime
+  orderStatus         Boolean
+  specialInstructions String
+  customerId          Int
+  customer            Customer      @relation(fields: [customerId], references: [id])
+  payments            Payment[]
+  orderItems          OrderItem[]
+  menuItems           MenuItem[]
+  discountCodeId      Int?
+  discountCode        DiscountCode? @relation(fields: [discountCodeId], references: [id])
+}

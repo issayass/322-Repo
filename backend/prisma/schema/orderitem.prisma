@@ -1,0 +1,10 @@
+// orderitem.prisma
+
+model OrderItem {
+  id       Int        @id @default(autoincrement())
+  itemID   String     @unique
+  name     String
+  price    Float
+  orders   Order[]
+  CartItem CartItem[]
+}

@@ -1,0 +1,10 @@
+// cartitem.prisma
+
+model CartItem {
+  id          Int       @id @default(autoincrement())
+  quantity    Int
+  cartId      Int
+  cart        Cart      @relation(fields: [cartId], references: [id])
+  orderItemId Int
+  orderItem   OrderItem @relation(fields: [orderItemId], references: [id])
+}

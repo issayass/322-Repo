@@ -1,0 +1,9 @@
+// notification.prisma
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  message   String
+  timestamp DateTime @default(now())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+}

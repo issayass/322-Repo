@@ -1,0 +1,7 @@
+// manager.prisma
+
+model Manager {
+  id        Int    @id @default(autoincrement())
+  managerID String @unique
+  users     User[]
+}

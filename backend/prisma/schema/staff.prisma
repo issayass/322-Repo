@@ -1,0 +1,9 @@
+// staff.prisma
+
+model Staff {
+  id      Int    @id @default(autoincrement())
+  staffID String @unique
+  role    String
+  userId  Int
+  user    User   @relation(fields: [userId], references: [id])
+}

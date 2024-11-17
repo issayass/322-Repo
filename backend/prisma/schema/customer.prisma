@@ -1,0 +1,10 @@
+// customer.prisma
+
+model Customer {
+  id             Int       @id @default(autoincrement())
+  userId         Int       @unique
+  user           User      @relation(fields: [userId], references: [id])
+  cart           Cart?
+  orders         Order[]
+  paymentDetails Payment[]
+}

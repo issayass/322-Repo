@@ -1,6 +1,13 @@
 // user.prisma
 
 model User {
-    id      Int     @id @default(autoincrement())
-    name    String
+  id            Int            @id @default(autoincrement())
+  password      String
+  name          String
+  email         String         @unique
+  notifications Notification[]
+  staff         Staff[]
+  customer      Customer?
+  managerId     Int?
+  manager       Manager?       @relation(fields: [managerId], references: [id])
 }
