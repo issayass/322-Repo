@@ -1,6 +1,9 @@
 # remove javascript files (typescript only)
 *.js
 
+# remove environment files
+.env
+
 # npm
 node_modules
 package-lock.json
