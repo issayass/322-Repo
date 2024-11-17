@@ -9,18 +9,12 @@
 import express from 'express';
 import type { Request, Response } from 'express';
 
-// Prisma Imports
-import { PrismaClient } from '@prisma/client';
-
 const app = express();
-const port = 3001;
 
-const prisma = new PrismaClient()
+app.use(express.json());
 
 app.get('/', (req: Request, res: Response) => {
     res.send("Hello, World!");
 });
 
-app.listen(port, () => {
-    console.log(`App listening on port ${port}`);
-});
+export default app;
