@@ -1,6 +1,6 @@
 /**
  * Copyright (c) CPTS 322 Harry's Diner Project
- * 
+ *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
@@ -21,37 +21,37 @@ import { getAllUsers, createUser } from '../services/userService';
 import { createUserSchema, toUserDTO } from '../models/userModel';
 
 export const getUsers = async (req: Request, res: Response) => {
-    try {
-        const users = await getAllUsers();
+  try {
+    const users = await getAllUsers();
 
-        users.map(toUserDTO);
+    users.map(toUserDTO);
 
-        res.json(users);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch users.' });
-    }
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch users.' });
+  }
 };
 
 export const createUserHandler = async (req: Request, res: Response) => {
-    try {
-        const data = createUserSchema.parse(req.body);
+  try {
+    const data = createUserSchema.parse(req.body);
 
-        const newUser = await createUser(data);
+    const newUser = await createUser(data);
 
-        const userDTO = toUserDTO(newUser);
+    const userDTO = toUserDTO(newUser);
 
-        res.status(201).json(userDTO);
-    } catch (error: unknown) {
-        let message = 'Failed to create user.';
+    res.status(201).json(userDTO);
+  } catch (error: unknown) {
+    let message = 'Failed to create user.';
 
-        if (error instanceof ZodError) {
-            message = error.issues[0].message;
-        }
-
-        if (error instanceof PrismaClientKnownRequestError) {
-            message = 'User already exists with this email address.';
-        }
-        
-        res.status(500).json({ error: message });
+    if (error instanceof ZodError) {
+      message = error.issues[0].message;
     }
-}
+
+    if (error instanceof PrismaClientKnownRequestError) {
+      message = 'User already exists with this email address.';
+    }
+
+    res.status(500).json({ error: message });
+  }
+};
