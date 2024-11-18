@@ -12,7 +12,7 @@ import { z } from 'zod';
 import { User } from '@prisma/client';
 
 export const createUserSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
+  name: z.string().min(1, 'Name is required.'),
   email: z.string().email('Invalid email address.'),
   password: z.string().min(8, 'Password must be at least 8 characters long.'),
   managerId: z.number().optional(),
@@ -20,7 +20,7 @@ export const createUserSchema = z.object({
 
 export const updateUserSchema = z.object({
   name: z.string().optional(),
-  email: z.string().email('Invalid email address').optional(),
+  email: z.string().email('Invalid email address.').optional(),
   password: z
     .string()
     .min(8, 'Password must be at least 8 characters long.')

@@ -3,6 +3,7 @@
 
 # remove environment files
 .env
+.env.test
 
 # npm
 node_modules

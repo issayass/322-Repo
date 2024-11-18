@@ -11,8 +11,14 @@ import type { Request, Response } from 'express';
 // Prisma Imports
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
+// Zod Validation Imports
+import { ZodError } from 'zod';
+
 // Service (auth) Imports
 import { registerUser, loginUser } from '../services/authService';
+
+// Schema Validation (User Model) Imports
+import { createUserSchema, toUserDTO } from '../models/userModel';
 
 /**
  * Controller to register a new user.
@@ -26,16 +32,32 @@ import { registerUser, loginUser } from '../services/authService';
  */
 export const register = async (req: Request, res: Response) => {
   try {
-    const user = await registerUser(req.body);
-    res.status(201).json({ message: 'User registered successfully.', user });
+    const data = createUserSchema.parse(req.body);
+
+    const newUser = await registerUser(data);
+
+    const userDTO = toUserDTO(newUser);
+
+    res
+      .status(201)
+      .json({ message: 'User registered successfully.', user: userDTO });
   } catch (error: unknown) {
+    let statusCode = 500;
     let message = 'Failed to register a new user.';
 
-    if (error instanceof PrismaClientKnownRequestError) {
-      message = `Prisma error: ${error.message}`;
+    if (error instanceof ZodError) {
+      statusCode = 400;
+      message = error.issues[0].message;
+    } else if (error instanceof PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        statusCode = 409;
+        message = 'A user already exists with this email address.';
+      } else {
+        message = `Prisma error: ${error.message}`;
+      }
     }
 
-    res.status(401).json({ error: message });
+    res.status(statusCode).json({ error: message });
   }
 };
 
@@ -58,7 +80,12 @@ export const login = async (req: Request, res: Response) => {
   } catch (error: unknown) {
     let message = 'Failed to login user.';
 
-    if (error instanceof PrismaClientKnownRequestError) {
+    if (
+      error instanceof Error &&
+      error.message === 'Invalid email or password.'
+    ) {
+      message = error.message;
+    } else if (error instanceof PrismaClientKnownRequestError) {
       message = `Prisma error: ${error.message}`;
     }
 
