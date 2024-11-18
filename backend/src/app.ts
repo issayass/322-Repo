@@ -9,6 +9,7 @@
 import express from 'express';
 
 // Route Imports
+import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
 import customerRoutes from './routes/customerRoutes';
 import staffRoutes from './routes/staffRoutes';
@@ -18,6 +19,7 @@ const app = express();
 
 app.use(express.json());
 
+app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/customers', customerRoutes);
 app.use('/staff', staffRoutes);

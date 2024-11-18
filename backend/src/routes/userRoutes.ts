@@ -8,6 +8,9 @@
 // Express Imports
 import { Router } from 'express';
 
+// Middleware Imports
+import { authenticate } from '../middleware/auth';
+
 // User Controller Imports
 import {
   getUsers,
@@ -23,6 +26,6 @@ router.get('/', getUsers);
 router.get('/:id', getUser);
 router.post('/', createUserHandler);
 router.put('/:id', updateUserHandler);
-router.delete('/:id', deleteUserHandler);
+router.delete('/:id', authenticate, deleteUserHandler);
 
 export default router;

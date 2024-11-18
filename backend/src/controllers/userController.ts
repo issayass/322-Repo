@@ -177,6 +177,15 @@ export const updateUserHandler = async (req: Request, res: Response) => {
 export const deleteUserHandler = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.id, 10);
+
+    // A user can only delete themselves.
+    if (req.user?.id !== userId) {
+      res
+        .status(403)
+        .json({ error: 'You are not authorized to delete this user.' });
+      return;
+    }
+
     const deletedUser = await deleteUser(userId);
 
     if (!deletedUser) {
