@@ -72,7 +72,7 @@ export const getUser = async (req: Request, res: Response) => {
     const user = await getUserById(userId);
 
     if (!user) {
-      res.status(404).json({ error: 'User not found' });
+      res.status(404).json({ error: 'User not found.' });
       return;
     }
 
@@ -180,7 +180,7 @@ export const deleteUserHandler = async (req: Request, res: Response) => {
     const deletedUser = await deleteUser(userId);
 
     if (!deletedUser) {
-      res.status(404).json({ error: 'User not found' });
+      res.status(404).json({ error: 'User not found.' });
       return;
     }
 

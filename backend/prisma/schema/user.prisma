@@ -8,6 +8,5 @@ model User {
   notifications Notification[]
   staff         Staff[]
   customer      Customer?
-  managerId     Int?
-  manager       Manager?       @relation(fields: [managerId], references: [id])
+  manager       Manager?
 }
