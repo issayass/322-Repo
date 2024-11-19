@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 
 interface MenuItem {
@@ -12,6 +11,7 @@ interface MenuProps {
 
 const Menu: React.FC<MenuProps> = ({ addToCart }) => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [notification, setNotification] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -23,18 +23,25 @@ const Menu: React.FC<MenuProps> = ({ addToCart }) => {
         console.error("Error fetching menu:", error);
       }
     };
-    
+
     fetchMenuItems();
   }, []);
+
+  const handleAddToCart = (item: MenuItem) => {
+    addToCart(item);
+    setNotification(`${item.name} has been added to your cart!`);
+    setTimeout(() => setNotification(null), 1000); 
+  };
 
   return (
     <div className="menu">
       <h2>Menu</h2>
+      {notification && <div className="notification">{notification}</div>}
       <ul>
         {menuItems.map((item, index) => (
           <li key={index}>
             {item.name} - ${item.price.toFixed(2)}
-            <button onClick={() => addToCart(item)}>Add to Order</button>
+            <button onClick={() => handleAddToCart(item)}>Add to Order</button>
           </li>
         ))}
       </ul>

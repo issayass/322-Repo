@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 
 interface CartItem {
   name: string;
@@ -13,20 +12,56 @@ interface CartProps {
 }
 
 const Cart: React.FC<CartProps> = ({ cartItems, clearCart }) => {
-  const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const [tip, setTip] = useState<number>(0);
+  const [showCheckout, setShowCheckout] = useState<boolean>(false);
+
+  const taxRate = 0.08; // Example tax rate: 8%
+  const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const tax = subtotal * taxRate;
+  const total = subtotal + tax + tip;
+
+  const handleCheckout = () => {
+    setShowCheckout(true);
+  };
+
+  const handleTipChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTip(parseFloat(event.target.value) || 0);
+  };
 
   return (
     <div className="cart">
-      <h2>Cart</h2>
+      <h2 className="checkout-text">Cart</h2>
       <ul>
         {cartItems.map((item, index) => (
-          <li key={index}>
+          <li key={index} className="checkout-text">
             {item.name} - ${item.price.toFixed(2)} x {item.quantity}
           </li>
         ))}
       </ul>
-      <p>Total: ${total.toFixed(2)}</p>
-      <button onClick={clearCart}>Clear Cart</button>
+      <p className="checkout-text">Subtotal: ${subtotal.toFixed(2)}</p>
+      <p className="checkout-text">Tax (8%): ${tax.toFixed(2)}</p>
+
+      {showCheckout ? (
+        <div className="checkout">
+          <label className="checkout-text">
+            Add Tip: $
+            <input
+              type="number"
+              step="0.01"
+              value={tip}
+              onChange={handleTipChange}
+            />
+          </label>
+          <p className="checkout-text">Grand Total: ${total.toFixed(2)}</p>
+          <button onClick={clearCart}>Complete Order</button>
+        </div>
+      ) : (
+        <button onClick={handleCheckout}>Checkout</button>
+      )}
+
+      <button onClick={clearCart} style={{ marginTop: '10px' }}>
+        Clear Cart
+      </button>
     </div>
   );
 };
