@@ -30,20 +30,20 @@ const Cart: React.FC<CartProps> = ({ cartItems, clearCart }) => {
 
   return (
     <div className="cart">
-      <h2>Cart</h2>
+      <h2 className="checkout-text">Cart</h2>
       <ul>
         {cartItems.map((item, index) => (
-          <li key={index}>
+          <li key={index} className="checkout-text">
             {item.name} - ${item.price.toFixed(2)} x {item.quantity}
           </li>
         ))}
       </ul>
-      <p>Subtotal: ${subtotal.toFixed(2)}</p>
-      <p>Tax (8%): ${tax.toFixed(2)}</p>
+      <p className="checkout-text">Subtotal: ${subtotal.toFixed(2)}</p>
+      <p className="checkout-text">Tax (8%): ${tax.toFixed(2)}</p>
 
       {showCheckout ? (
         <div className="checkout">
-          <label>
+          <label className="checkout-text">
             Add Tip: $
             <input
               type="number"
@@ -52,7 +52,7 @@ const Cart: React.FC<CartProps> = ({ cartItems, clearCart }) => {
               onChange={handleTipChange}
             />
           </label>
-          <p>Grand Total: ${total.toFixed(2)}</p>
+          <p className="checkout-text">Grand Total: ${total.toFixed(2)}</p>
           <button onClick={clearCart}>Complete Order</button>
         </div>
       ) : (
