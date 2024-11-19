@@ -116,4 +116,24 @@ button:hover {
   color: #ffffff;
 }
 
+.discount {
+  margin-top: 10px;
+}
+
+.discount input {
+  padding: 5px;
+  width: 200px;
+  margin-right: 10px;
+}
+
+.discount button {
+  padding: 5px 10px;
+}
+
+.error {
+  color: red;
+  margin-top: 5px;
+  font-size: 0.9em;
+}
+
 
