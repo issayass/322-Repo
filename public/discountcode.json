@@ -1,0 +1,8 @@
+{
+    "codes": [
+      { "code": "SAVE10", "discountPercentage": 10 },
+      { "code": "FREEMEAL", "discountPercentage": 20 },
+      { "code": "DINER50", "discountPercentage": 50 }
+    ]
+  }
+  
