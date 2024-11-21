@@ -3,7 +3,7 @@ import React, { useState, FormEvent, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 //import axiosInstance from './axiosInstance';
 import { AuthContext } from './AuthContext';
-import './Login.css';
+import './style.css';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>(''); 
@@ -39,28 +39,28 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="loginWrapper">
-      <div className="login">
+    <div id='wrapper' className="loginWrapper">
+      <div id='component' className="login">
         <h2>Welcome to Harry's Diner!</h2>
         <p>Enter your account email and password to log in.</p>
         <form onSubmit={handleSubmit}>
-          <input
+          <input id='input'
             type="email"
             placeholder="your.email@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <input
+          <input id='input'
             type="password"
             placeholder="ExamplePassword"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button type="submit">Login</button>
+          <button id='center-button' type="submit">Login</button>
         </form>
-        <p id="newAccount">
+        <p id="new-account">
           Don't have an account?{' '}
           <button onClick={() => navigate('/register')}>Register here</button>
         </p>

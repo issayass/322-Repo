@@ -1,6 +1,7 @@
 // src/Inventory.tsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './style.css'
 
 interface InventoryItem {
   name: string;
@@ -53,33 +54,37 @@ const Inventory: React.FC = () => {
   );
 
   return (
-    <div className="inventory">
-      <button onClick={() => navigate('/launchpad')} className="back-arrow">
-        ← Back to Launch Pad
-      </button>
-      <h2>Inventory</h2>
-      <input
-        type="text"
-        placeholder="Search inventory..."
-        value={searchTerm}
-        onChange={handleSearch}
-      />
-      <ul>
-        {filteredInventory.map((item, index) => (
-          <li key={index}>
-            {item.name} - {item.quantity} {item.unit}
-            <input
-              type="number"
-              min="1"
-              placeholder="Amount"
-              value={restockAmounts[item.name] || ''}
-              onChange={(e) => handleRestockChange(item.name, Number(e.target.value))}
-              style={{ marginLeft: '10px', width: '80px' }}
-            />
-            <button onClick={() => handleRestock(item.name)}>Restock</button>
-          </li>
-        ))}
-      </ul>
+    <div id='wrapper'>
+      <div className="inventory" id='component'>
+        <button id='return-button' onClick={() => navigate('/launchpad')} className="back-arrow">
+          ← Back to Launch Pad
+        </button>
+          <div id='component'>
+          <h2>Inventory</h2>
+          <input
+            type="text"
+            placeholder="Search inventory..."
+            value={searchTerm}
+            onChange={handleSearch}
+          />
+          <ul>
+            {filteredInventory.map((item, index) => (
+              <li key={index}>
+                {item.name} - {item.quantity} {item.unit}
+                <input
+                  type="number"
+                  min="1"
+                  placeholder="Amount"
+                  value={restockAmounts[item.name] || ''}
+                  onChange={(e) => handleRestockChange(item.name, Number(e.target.value))}
+                  style={{ marginLeft: '10px', width: '80px' }}
+                />
+                <button onClick={() => handleRestock(item.name)}>Restock</button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };

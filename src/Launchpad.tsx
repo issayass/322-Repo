@@ -1,15 +1,21 @@
 // src/LaunchPad.tsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './style.css'
 
 const LaunchPad: React.FC = () => { // Renamed component
   const navigate = useNavigate();
 
   return (
-    <div className="launch-pad">
-      <h2 className="welcome-text">Welcome to the Restaurant App</h2>
-      <button onClick={() => navigate('/menu')}>Menu</button>
-      <button onClick={() => navigate('/inventory')}>Inventory</button>
+    <div id='wrapper'>
+      <button id='return-button' onClick={() => navigate('/login')}>Log In / Sign Up</button>
+      <div id="component">
+        <h2 className="welcome-text">Welcome to the Restaurant App</h2>
+        <div id='button-grid'>
+          <button id='button-grid-button' onClick={() => navigate('/menu')}>Menu</button>
+          <button id='button-grid-button' onClick={() => navigate('/inventory')}>Inventory</button>
+        </div>
+      </div>
     </div>
   );
 };

@@ -50,7 +50,7 @@ const AppRouter: React.FC = () => {
       />
 
       {/* Catch-all route to handle unknown paths */}
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Navigate to="/launchpad" replace />} />
     </Routes>
   );
 };

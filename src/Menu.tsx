@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from './CartContext';
+import './style.css'
 
 interface MenuItem {
   name: string;
@@ -35,23 +36,27 @@ const Menu: React.FC = () => {
   };
 
   return (
-    <div className="menu">
-      <button onClick={() => navigate('/launchpad')} className="back-button">
-        ← Back to Launch Pad
-      </button>
-      <h2>Menu</h2>
-      {notification && <div className="notification">{notification}</div>}
-      <ul>
-        {menuItems.map((item, index) => (
-          <li key={index}>
-            {item.name} - ${item.price.toFixed(2)}
-            <button onClick={() => handleAddToCart(item)}>Add to Order</button>
-          </li>
-        ))}
-      </ul>
-      <button onClick={() => navigate('/cart')} className="view-cart-button">
-        View Cart
-      </button>
+    <div id='wrapper'>
+      <div id='return-button'>
+        <button onClick={() => navigate('/launchpad')} className="back-button">
+          ← Back to Launch Pad
+        </button>
+      </div>
+      <div id="component">
+        <h2>Menu</h2>
+        {notification && <div className="notification">{notification}</div>}
+        <ul>
+          {menuItems.map((item, index) => (
+            <li key={index}>
+              {item.name} - ${item.price.toFixed(2)}
+              <button onClick={() => handleAddToCart(item)}>Add to Order</button>
+            </li>
+          ))}
+        </ul>
+        <button onClick={() => navigate('/cart')} className="view-cart-button">
+          View Cart
+        </button>
+      </div>
     </div>
   );
 };
