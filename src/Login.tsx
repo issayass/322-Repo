@@ -14,7 +14,7 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (email === 'test@example.com' && password === 'password123') {
+    if (email === 'a@a.com' && password === 'pw') {
       setAuthToken('mockToken'); 
       navigate('/launchpad');
     } else {
