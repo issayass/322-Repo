@@ -2,13 +2,7 @@
   "users": [
     {
       "username": "harry",
-      "password": "diner",
-      "type": "staff"
-    },
-    {
-      "username": "user",
-      "password": "diner",
-      "type": "normal"
+      "password": "diner"
     }
   ],
   "menu": [
