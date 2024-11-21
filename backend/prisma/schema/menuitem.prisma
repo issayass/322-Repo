@@ -1,0 +1,9 @@
+// menuitem.prisma
+
+model MenuItem {
+  id         Int     @id @default(autoincrement())
+  menuItemID String  @unique
+  name       String
+  price      Float
+  orders     Order[]
+}

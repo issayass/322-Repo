@@ -1,0 +1,14 @@
+// payment.prisma
+
+model Payment {
+  id            Int      @id @default(autoincrement())
+  paymentID     String   @unique
+  amount        Float
+  paymentMethod String
+  paymentStatus Boolean
+  paymentDate   DateTime
+  orderId       Int
+  order         Order    @relation(fields: [orderId], references: [id])
+  customerId    Int
+  customer      Customer @relation(fields: [customerId], references: [id])
+}

@@ -1,0 +1,12 @@
+// ingredient.prisma
+
+model Ingredient {
+  id             Int       @id @default(autoincrement())
+  ingredientID   String    @unique
+  name           String
+  quantity       Int
+  unitPrice      Float
+  expirationDate DateTime
+  inventoryId    Int
+  inventory      Inventory @relation(fields: [inventoryId], references: [id])
+}

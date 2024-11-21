@@ -1,0 +1,9 @@
+// discountcode.prisma
+
+model DiscountCode {
+  id                 Int      @id @default(autoincrement())
+  code               String   @unique
+  discountPercentage Float
+  expirationDate     DateTime
+  orders             Order[]
+}

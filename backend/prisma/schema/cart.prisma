@@ -1,0 +1,9 @@
+// cart.prisma
+
+model Cart {
+  id         Int        @id @default(autoincrement())
+  totalPrice Float
+  customerId Int        @unique
+  customer   Customer   @relation(fields: [customerId], references: [id])
+  cartItems  CartItem[]
+}
