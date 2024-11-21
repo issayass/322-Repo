@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import './App.css';
 import Menu from './Menu';
@@ -13,17 +12,23 @@ interface CartItem {
 }
 
 type View = 'launchPad' | 'menu' | 'inventory' | 'cart';
+type UserType = 'normal' | 'staff';
 
 const App: React.FC = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [userType, setUserType] = useState<UserType>('normal'); // Default to 'normal'
   const [currentView, setCurrentView] = useState<View>('launchPad');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   const handleLogin = () => {
     if (username === 'harry' && password === 'diner') {
       setLoggedIn(true);
+      setUserType('staff'); // Staff user
+    } else if (username === 'user' && password === 'diner') {
+      setLoggedIn(true);
+      setUserType('normal'); // Normal user
     } else {
       alert('Invalid username or password');
     }
@@ -68,9 +73,9 @@ const App: React.FC = () => {
           <button onClick={handleLogin}>Login</button>
         </div>
       ) : currentView === 'launchPad' ? (
-        <LaunchPad 
+        <LaunchPad
           goToMenu={() => setCurrentView('menu')}
-          goToInventory={() => setCurrentView('inventory')}
+          goToInventory={userType === 'staff' ? () => setCurrentView('inventory') : undefined}
         />
       ) : currentView === 'menu' ? (
         <>
