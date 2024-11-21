@@ -28,6 +28,12 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  margin: 0; /* Remove default margin */
+  background-image: url('/images/HarrysDiner.png'); /* Adjust the path to your image */
+  background-size: cover; /* Cover the entire viewport */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Prevent tiling */
+  font-family: Arial, sans-serif; /* Optional: Set a global font */
 }
 
 h1 {
