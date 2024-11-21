@@ -3,7 +3,7 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './Login.tsx';
-import LaunchPad from './Launchpad.tsx';
+import LaunchPad from './LaunchPad.tsx';
 import Menu from './Menu';
 import Inventory from './Inventory.tsx';
 import Cart from './Cart';
