@@ -1,8 +1,8 @@
 {
-    "codes": [
-      { "code": "SAVE10", "discountPercentage": 10 },
-      { "code": "FREEMEAL", "discountPercentage": 20 },
-      { "code": "DINER50", "discountPercentage": 50 }
-    ]
-  }
-  
+  "codes": [
+    { "code": "SAVE10", "discountPercentage": 10 },
+    { "code": "FREESHIP", "discountPercentage": 5 },
+    { "code": "HOLIDAY20", "discountPercentage": 20 },
+    { "code": "HARRY", "discountPercentage": 100 }
+  ]
+}
