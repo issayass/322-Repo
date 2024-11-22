@@ -1,15 +1,10 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from './CartContext';
 import './style.css';
 
 const TAX_RATE = 0.1; // 10% tax rate
 const DEFAULT_TIP_PERCENTAGE = 0.15; // 15% tip by default
-
-interface DiscountCode {
-  code: string;
-  discountPercentage: number;
-}
 
 const Cart: React.FC = () => {
   const navigate = useNavigate();
@@ -18,35 +13,18 @@ const Cart: React.FC = () => {
   const [tipPercentage, setTipPercentage] = useState<number>(DEFAULT_TIP_PERCENTAGE);
   const [discountCode, setDiscountCode] = useState<string>('');
   const [discountAmount, setDiscountAmount] = useState<number>(0);
-  const [discountCodes, setDiscountCodes] = useState<DiscountCode[]>([]);
+  const [allergies, setAllergies] = useState<string>(''); // To store allergy info
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const taxes = subtotal * TAX_RATE;
   const tip = subtotal * tipPercentage;
 
-  const totalBeforeDiscount = subtotal + taxes;
-  const totalAfterDiscount = totalBeforeDiscount - discountAmount + tip;
-
-  useEffect(() => {
-    const fetchDiscountCodes = async () => {
-      try {
-        const response = await fetch('/discountcode.json');
-        const data = await response.json();
-        setDiscountCodes(data.codes);
-      } catch (error) {
-        console.error('Error fetching discount codes:', error);
-      }
-    };
-
-    fetchDiscountCodes();
-  }, []);
+  const totalBeforeDiscount = subtotal + taxes + tip;
+  const totalAfterDiscount = totalBeforeDiscount - discountAmount;
 
   const handleApplyDiscount = () => {
-    const matchingCode = discountCodes.find((code) => code.code === discountCode);
-
-    if (matchingCode) {
-      const discount = (totalBeforeDiscount * matchingCode.discountPercentage) / 100;
-      setDiscountAmount(discount);
+    if (discountCode === 'SAVE10') {
+      setDiscountAmount(totalBeforeDiscount * 0.1); // 10% discount
     } else {
       alert('Invalid discount code!');
       setDiscountAmount(0);
@@ -100,6 +78,9 @@ const Cart: React.FC = () => {
                 <p>Discount Applied: -${discountAmount.toFixed(2)}</p>
               )}
               <p className="total">Total After Discount: ${Math.max(0, totalAfterDiscount).toFixed(2)}</p>
+            </div>
+            <div className="allergies">
+              {allergies && <p>Allergies: {allergies}</p>}
             </div>
             <button onClick={clearCart}>Clear Cart</button>
           </>
