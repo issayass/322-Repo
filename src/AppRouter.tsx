@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './Login.tsx';
@@ -9,6 +7,7 @@ import Inventory from './Inventory.tsx';
 import Cart from './Cart';
 import PrivateRoute from './PrivateRoute';
 import Register from './Register';
+import CartConfirmation from './CartConfirmation.tsx';
 
 const AppRouter: React.FC = () => {
   return (
@@ -24,7 +23,7 @@ const AppRouter: React.FC = () => {
           </PrivateRoute>
         }
       />
-  <Route
+      <Route
         path="/menu"
         element={
           <PrivateRoute>
@@ -40,7 +39,6 @@ const AppRouter: React.FC = () => {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/cart"
         element={
@@ -49,7 +47,14 @@ const AppRouter: React.FC = () => {
           </PrivateRoute>
         }
       />
-
+      <Route
+        path="/cart-confirmation"
+        element={
+          <PrivateRoute>
+            <CartConfirmation />
+          </PrivateRoute>
+        }
+      />
       {/* Catch-all route to handle unknown paths */}
       <Route path="*" element={<Navigate to="/launchpad" replace />} />
     </Routes>
@@ -57,4 +62,3 @@ const AppRouter: React.FC = () => {
 };
 
 export default AppRouter;
-
