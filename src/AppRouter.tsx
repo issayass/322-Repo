@@ -9,6 +9,7 @@ import Inventory from './Inventory.tsx';
 import Cart from './Cart';
 import PrivateRoute from './PrivateRoute';
 import Register from './Register';
+
 const AppRouter: React.FC = () => {
   return (
     <Routes>
