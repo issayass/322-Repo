@@ -7,7 +7,9 @@ import Inventory from './Inventory.tsx';
 import Cart from './Cart';
 import PrivateRoute from './PrivateRoute';
 import Register from './Register';
-import CartConfirmation from './CartConfirmation.tsx';
+import CartConfirmation from './CartConfirmation';
+import OrderNotification from './OrderNotification';
+import ModifyOrderNotification from './ModifyOrderNotification'; // Import the new component
 
 const AppRouter: React.FC = () => {
   return (
@@ -19,7 +21,7 @@ const AppRouter: React.FC = () => {
         path="/launchpad"
         element={
           <PrivateRoute>
-            <LaunchPad /> 
+            <LaunchPad />
           </PrivateRoute>
         }
       />
@@ -52,6 +54,22 @@ const AppRouter: React.FC = () => {
         element={
           <PrivateRoute>
             <CartConfirmation />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/order-notification"
+        element={
+          <PrivateRoute>
+            <OrderNotification />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/modify-order-notification"
+        element={
+          <PrivateRoute>
+            <ModifyOrderNotification />
           </PrivateRoute>
         }
       />
