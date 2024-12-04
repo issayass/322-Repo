@@ -14,6 +14,7 @@ import userRoutes from './routes/userRoutes';
 import customerRoutes from './routes/customerRoutes';
 import staffRoutes from './routes/staffRoutes';
 import managerRoutes from './routes/managerRoutes';
+import inventoryRoutes from './routes/inventoryRoutes';
 
 const app = express();
 
@@ -24,5 +25,6 @@ app.use('/users', userRoutes);
 app.use('/customers', customerRoutes);
 app.use('/staff', staffRoutes);
 app.use('/managers', managerRoutes);
+app.use('/inventory', inventoryRoutes);
 
 export default app;
