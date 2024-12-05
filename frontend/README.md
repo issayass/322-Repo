@@ -1,50 +1,51 @@
-# React + TypeScript + Vite
+# Harry's Diner Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the **frontend** of the Harry's Diner project. This package is built using **React** with **Vite** as the build tool. This application provides a user interface for customers, staff, and managers to interact with the restaurant's system.
 
-Currently, two official plugins are available:
+## **Project Structure**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The frontend project is structured in the default way by Vite, the build tool, to help with maintainability. Below is an overview of the directories and why they exist.
 
-## Expanding the ESLint configuration
+### `/src`
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+The src directory contains the main source code for the application.
 
-- Configure the top-level `parserOptions` property like this:
+### `/public`
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+The public directory contains files that will be served from the main directory in the distribution after building.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### `/prisma`
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+The prisma directory contains the structure of the database defined by the Prisma ORM that is necessary in order to generate the Prisma Client for frontend typing database operations.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## **Scripts**
+
+The `package.json` file contains a couple of scripts to manage and build the project.
+
+- `npm run dev`: Starts the development server at `http://localhost:5173`
+- `npm run build`: Builds the project for production in the `/dist` directory.
+
+## Setup
+
+### **Prerequisites**
+
+- Install Node.js
+
+### **Steps**
+
+1. Navigate to the `frontend` directory:
+    ```bash
+    cd frontend
+    ```
+
+2. Install dependencies:
+    ```bash
+    npm install
+    ```
+
+3. Start the development server:
+    ```bash
+    npm run dev
+    ```
+
+4. Open your browser and navigate to the URL shown in the terminal. This will default to `http://localhost:5173`.
