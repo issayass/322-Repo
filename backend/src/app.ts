@@ -8,6 +8,9 @@
 // Express Imports
 import express from 'express';
 
+// Cors Imports
+import cors from 'cors';
+
 // Route Imports
 import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
@@ -19,6 +22,7 @@ import inventoryRoutes from './routes/inventoryRoutes';
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
