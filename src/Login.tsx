@@ -2,7 +2,7 @@
 import React, { useState, FormEvent, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 //import axiosInstance from './axiosInstance';
-import { AuthContext } from './AuthContext';
+import { AuthContext, useAuth} from './AuthContext';
 import './style.css';
 
 const Login: React.FC = () => {
@@ -10,18 +10,21 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState<string>(''); 
   const { setAuthToken } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { setRole } = useAuth();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if (email === 'a@a.com' && password === 'pw') {
-      setAuthToken('mockToken'); 
-      navigate('/launchpad');
+      setRole('admin'); 
+    } else if (email === 'staff@s.com' && password === 'staff') {
+      setRole('staff'); 
     } else {
       alert('Invalid email or password');
     }
 
-    
+    setAuthToken('mockToken'); 
+    navigate('/launchpad');
 
     /*
     try {
@@ -67,6 +70,7 @@ const Login: React.FC = () => {
       </div>
     </div>
   );
-};
+  };
+}
 
 export default Login;

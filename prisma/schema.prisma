@@ -1,0 +1,147 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  password      String
+  name          String
+  email         String         @unique
+  notifications Notification[]
+  staff         Staff[]
+  customer      Customer?
+  manager       Manager?
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  message   String
+  timestamp DateTime @default(now())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Staff {
+  id      Int    @id @default(autoincrement())
+  staffID String @unique
+  role    String
+  userId  Int
+  user    User   @relation(fields: [userId], references: [id])
+}
+
+model Payment {
+  id            Int      @id @default(autoincrement())
+  paymentID     String   @unique
+  amount        Float
+  paymentMethod String
+  paymentStatus Boolean
+  paymentDate   DateTime
+  orderId       Int
+  order         Order    @relation(fields: [orderId], references: [id])
+  customerId    Int
+  customer      Customer @relation(fields: [customerId], references: [id])
+}
+
+model OrderItem {
+  id       Int        @id @default(autoincrement())
+  itemID   String     @unique
+  name     String
+  price    Float
+  orders   Order[]
+  CartItem CartItem[]
+}
+
+model Order {
+  id                  Int           @id @default(autoincrement())
+  orderDate           DateTime
+  orderStatus         Boolean
+  specialInstructions String
+  customerId          Int
+  customer            Customer      @relation(fields: [customerId], references: [id])
+  payments            Payment[]
+  orderItems          OrderItem[]
+  menuItems           MenuItem[]
+  discountCodeId      Int?
+  discountCode        DiscountCode? @relation(fields: [discountCodeId], references: [id])
+}
+
+model MenuItem {
+  id         Int     @id @default(autoincrement())
+  menuItemID String  @unique
+  name       String
+  price      Float
+  orders     Order[]
+}
+
+model Manager {
+  id        Int    @id @default(autoincrement())
+  userId    Int    @unique
+  user      User   @relation(fields: [userId], references: [id])
+}
+
+model Inventory {
+  id             Int          @id @default(autoincrement())
+  ingredientID   String       @unique
+  name           String
+  quantity       Int
+  unitPrice      Float
+  expirationDate DateTime
+  ingredients    Ingredient[]
+}
+
+model Ingredient {
+  id             Int       @id @default(autoincrement())
+  ingredientID   String    @unique
+  name           String
+  quantity       Int
+  unitPrice      Float
+  expirationDate DateTime
+  inventoryId    Int
+  inventory      Inventory @relation(fields: [inventoryId], references: [id])
+}
+
+model DiscountCode {
+  id                 Int      @id @default(autoincrement())
+  code               String   @unique
+  discountPercentage Float
+  expirationDate     DateTime
+  orders             Order[]
+}
+
+model Customer {
+  id             Int       @id @default(autoincrement())
+  userId         Int       @unique
+  user           User      @relation(fields: [userId], references: [id])
+  cart           Cart?
+  orders         Order[]
+  paymentDetails Payment[]
+}
+
+model CartItem {
+  id          Int       @id @default(autoincrement())
+  quantity    Int
+  cartId      Int
+  cart        Cart      @relation(fields: [cartId], references: [id])
+  orderItemId Int
+  orderItem   OrderItem @relation(fields: [orderItemId], references: [id])
+}
+
+model Cart {
+  id         Int        @id @default(autoincrement())
+  totalPrice Float
+  customerId Int        @unique
+  customer   Customer   @relation(fields: [customerId], references: [id])
+  cartItems  CartItem[]
+}
