@@ -29,6 +29,10 @@ Contains the code for the backend API.
 
 Contains the GitHub Actions that are used in our CI/CD workflow.
 
+### `/documents`
+
+Contains the documents that we have used to document our activities throughout all of our sprints as well as UML diagrams for implementation of our application.
+
 ## **Installation and Setup**
 
 Follow these steps to get the project up and running on your local machine!
