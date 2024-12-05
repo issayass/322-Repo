@@ -17,7 +17,7 @@ const Login: React.FC = () => {
 
     if (email === 'a@a.com' && password === 'pw') {
       setRole('admin'); 
-    } else if (email === 'staff@s.com' && password === 'staff') {
+    } else if (email === 'kitchen@staff.com' && password === 'staff') {
       setRole('staff'); 
     } else {
       alert('Invalid email or password');
@@ -65,7 +65,7 @@ const Login: React.FC = () => {
         </form>
         <p id="new-account">
           Don't have an account?{' '}
-          <button onClick={() => navigate('/register')}>Register here</button>
+          <button id='center-button' onClick={() => navigate('/register')}>Register here</button>
         </p>
       </div>
     </div>

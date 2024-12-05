@@ -1,57 +1,202 @@
+/* Wrapper for centering content */
 #wrapper {
     height: 100vh;
-    width:  100vw;
+    width: 100vw;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: rgba(0, 0, 0, 0.6); /* Optional dark overlay for better readability */
 }
 
+/* Main component styling */
 #component {
-    background-color: rgba(74, 72, 72, 0.9); /* Optional styling */
+    background-color: rgba(74, 72, 72, 0.9); /* Slightly transparent dark background */
     padding: 50px;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
     display: flex;
     align-items: center;
     flex-direction: column;
+    width: 90%; /* Ensure responsiveness */
+    max-width: 600px; /* Limit max width */
 }
 
+/* Back button styling */
 #return-button {
-    position: absolute; /* Position relative to the nearest positioned ancestor */
-    top: 0; /* Dock to the top */
-    left: 0; /* Dock to the left */
-    margin: 30px;
+    position: absolute;
+    top: 30px;
+    left: 30px;
 }
 
+#return-button .back-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ff6666; /* Bright red for visibility */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#return-button .back-button:hover {
+    background-color: #ff4d4d; /* Darker red on hover */
+}
+
+/* Button grid styling */
 #button-grid {
     display: flex;
-    flex-direction: horzontal;
+    flex-direction: row; /* Corrected from 'horzontal' to 'row' */
+    justify-content: center;
+    flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
+    gap: 20px; /* Space between buttons */
 }
 
+/* Button styling in the grid */
 #button-grid-button {
-    margin: 20px;
-    padding: 50px;
+    margin: 10px;
+    padding: 15px 30px;
+    font-size: 18px;
+    background-color:goldenrod; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
+#button-grid-button:hover {
+    background-color:darkgoldenrod; /* Darker  on hover */
+}
+
+/* Login button styling */
+#login-button {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color:goldenrod; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#login-button:hover {
+    background-color:darkgoldenrod; /* Darker  on hover */
+}
+
+/* New account link styling */
 #new-account {
-    margin-top: 30%;
+    margin-top: 30px; /* Adjusted from 30% for consistency */
+    font-size: 14px;
+    text-align: center;
 }
 
+/* Center button styling */
 #center-button {
     display: flex;
-    margin:auto;
+    margin: auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color:goldenrod; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+#center-button:hover {
+    background-color: darkgoldenrod;
 }
 
+/* general button styling */
+#general-button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color:goldenrod; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#general-button:hover {
+    background-color:darkgoldenrod;
+}
+
+/* Input field styling */
 #input {
     display: flex;
     width: 300px;
     margin: 10px 0;
     padding: 10px;
+    border: 1px solid #ccc; /* Subtle border for clarity */
+    border-radius: 5px;
+    font-size: 16px;
 }
 
+/* Input focus state */
+#input:focus {
+    outline: none;
+    border-color: #4caf50; /* Match button color for consistency */
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+/* Body background image styling */
 body {
     background-image: url('images/HarrysDiner.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    font-family: Arial, sans-serif; /* Added consistent font */
+    color: #fff; /* Ensure text is readable against the dark background */
+    margin: 0; /* Remove default margins */
+}
+
+/* Status messages */
+.status-message {
+    font-size: 16px;
+    color: #4caf50; /* Green for success */
+    margin-bottom: 15px;
+}
+
+/* Utility classes for reusable spacing */
+.mt-10 {
+    margin-top: 10px;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mb-10 {
+    margin-bottom: 10px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #component {
+        padding: 30px;
+        width: 95%;
+    }
+
+    #input {
+        width: 100%; /* Full width on smaller screens */
+    }
+
+    #button-grid {
+        flex-direction: column; /* Stack buttons vertically */
+        align-items: center;
+    }
 }

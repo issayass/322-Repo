@@ -70,19 +70,19 @@ const Menu: React.FC = () => {
           {menuItems.map((item) => (
             <li key={item.id}>
               {item.name} - ${item.price.toFixed(2)}
-              <button onClick={() => handleAddToCart(item)}>Add to Order</button>
+              <button id="button-grid-button" onClick={() => handleAddToCart(item)}>Add to Order</button>
               {role === 'admin' && (
-                <button onClick={() => handleModifyMenuItem(item.id)}>Modify</button>
+                <button id="button-grid-button" onClick={() => handleModifyMenuItem(item.id)}>Modify</button>
               )}
             </li>
           ))}
         </ul>
         {role === 'admin' && (
-          <button onClick={handleAddMenuItem} className="add-item-button">
+          <button id="button-grid-button" onClick={handleAddMenuItem} className="add-item-button">
           Add New Item
           </button>
         )}
-        <button onClick={() => navigate('/cart')} className="view-cart-button">
+        <button id="button-grid-button" onClick={() => navigate('/cart')} className="view-cart-button">
           View Cart
         </button>
       </div>
