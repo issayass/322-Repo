@@ -2,8 +2,8 @@
 import React, { useState, FormEvent, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 //import axiosInstance from './axiosInstance';
-import { AuthContext, useAuth} from './AuthContext';
-import './style.css';
+import { AuthContext, useAuth} from '../context/AuthContext';
+import '../css/style.css';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>(''); 

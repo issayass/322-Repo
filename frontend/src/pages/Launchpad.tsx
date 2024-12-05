@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from './AuthContext';
-import './style.css';
+import { useAuth } from '../context/AuthContext';
+import '../css/style.css';
 
 const LaunchPad: React.FC = () => {
   const navigate = useNavigate();

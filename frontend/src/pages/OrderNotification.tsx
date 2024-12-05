@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './style.css';
+import '../css/style.css';
 
 interface Order {
   id: number;
@@ -9,9 +9,7 @@ interface Order {
   status: string;
 }
 
-const statuses = ['Received', 'Failed', 'Pending', 'Delivering', 'Completed'];
-
-const ModifyOrderNotification: React.FC = () => {
+const OrderNotification: React.FC = () => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
 
@@ -20,26 +18,18 @@ const ModifyOrderNotification: React.FC = () => {
     setOrders(storedOrders);
   }, []);
 
-  const handleUpdateStatus = (orderId: number, newStatus: string) => {
-    const updatedOrders = orders.map((order) =>
-      order.id === orderId ? { ...order, status: newStatus } : order
-    );
-    setOrders(updatedOrders);
-    localStorage.setItem('orders', JSON.stringify(updatedOrders));
-  };
-
   return (
     <div id="wrapper">
       <div id="component">
-        <h1>Modify Order Notifications</h1>
+        <h1>Order Notifications</h1>
         {orders.length === 0 ? (
-          <p>No orders to modify.</p>
+          <p>No orders placed yet.</p>
         ) : (
           <ul>
             {orders.map((order) => (
               <li key={order.id}>
                 <h2>Order #{order.id}</h2>
-                <p>Current Status: {order.status}</p>
+                <p>Status: {order.status}</p>
                 <p>Subtotal: ${order.subtotal}</p>
                 <ul>
                   {order.items.map((item, index) => (
@@ -48,18 +38,6 @@ const ModifyOrderNotification: React.FC = () => {
                     </li>
                   ))}
                 </ul>
-                <label htmlFor={`status-${order.id}`}>Update Status:</label>
-                <select
-                  id={`status-${order.id}`}
-                  value={order.status}
-                  onChange={(e) => handleUpdateStatus(order.id, e.target.value)}
-                >
-                  {statuses.map((status) => (
-                    <option key={status} value={status}>
-                      {status}
-                    </option>
-                  ))}
-                </select>
               </li>
             ))}
           </ul>
@@ -72,4 +50,4 @@ const ModifyOrderNotification: React.FC = () => {
   );
 };
 
-export default ModifyOrderNotification;
+export default OrderNotification;

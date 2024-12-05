@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CartContext } from './CartContext';
-import './style.css';
+import { CartContext } from '../context/CartContext';
+import '../css/style.css';
 
 interface MenuItem {
   name: string;

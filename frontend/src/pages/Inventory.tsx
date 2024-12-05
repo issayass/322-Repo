@@ -1,7 +1,7 @@
 // src/Inventory.tsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './style.css'
+import '../css/style.css'
 
 interface InventoryItem {
   name: string;

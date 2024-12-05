@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CartContext } from './CartContext';
-import './style.css';
+import { CartContext } from '../context/CartContext';
+import '../css/style.css';
 
 const CartConfirmation: React.FC = () => {
   const navigate = useNavigate();

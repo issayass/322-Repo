@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CartContext } from './CartContext';
-import './style.css';
+import { CartContext } from '../context/CartContext';
+import '../css/style.css';
 
 const TAX_RATE = 0.1; // 10% tax rate
 const DEFAULT_TIP_PERCENTAGE = 0.15; // 15% tip by default

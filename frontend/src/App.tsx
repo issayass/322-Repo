@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { AuthProvider } from './AuthContext';
-import { CartProvider } from './CartContext';
+import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
 import AppRouter from './AppRouter';
 
 const App: React.FC = () => {

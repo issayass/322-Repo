@@ -1,10 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './style.css'
-
-interface CustomizeDishProps {
-
-}
+import '../css/style.css'
 
 const CustomizeDish: React.FC = () => {
     const navigate = useNavigate();

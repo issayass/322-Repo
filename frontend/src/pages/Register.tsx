@@ -1,8 +1,8 @@
 
 import React, { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from './axiosInstance';
-import './style.css'
+import axiosInstance from '../axiosInstance';
+import '../css/style.css'
 
 const Register: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -19,6 +19,7 @@ const Register: React.FC = () => {
       alert('Registration successful! Please log in.');
       navigate('/login');
     } catch (error) {
+      console.error(error)
       alert('Registration failed. Please try again.');
     }
   };

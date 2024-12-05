@@ -1,16 +1,16 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Login from './Login.tsx';
-import LaunchPad from './Launchpad.tsx';
-import Menu from './Menu';
-import Inventory from './Inventory.tsx';
-import Cart from './Cart';
+import Login from './pages/Login.tsx';
+import LaunchPad from './pages/Launchpad.tsx';
+import Menu from './pages/Menu';
+import Inventory from './pages/Inventory.tsx';
+import Cart from './pages/Cart';
 import PrivateRoute from './PrivateRoute';
-import Register from './Register';
-import CustomizeDish from './CustomizeDish.tsx';
-import CartConfirmation from './CartConfirmation';
-import OrderNotification from './OrderNotification';
-import ModifyOrderNotification from './ModifyOrderNotification'; // Import the new component
+import Register from './pages/Register';
+import CustomizeDish from './pages/CustomizeDish.tsx';
+import CartConfirmation from './pages/CartConfirmation';
+import OrderNotification from './pages/OrderNotification.tsx';
+import ModifyOrderNotification from './pages/ModifyOrderNotification.tsx'; // Import the new component
 
 const AppRouter: React.FC = () => {
   return (
