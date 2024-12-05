@@ -55,10 +55,12 @@ const Inventory: React.FC = () => {
 
   return (
     <div id='wrapper'>
-      <div className="inventory" id='component'>
-        <button id='return-button' onClick={() => navigate('/launchpad')} className="back-arrow">
-          ← Back to Launch Pad
-        </button>
+      <div className="inventory">
+        <div id='return-button'>
+          <button  onClick={() => navigate('/launchpad')} className="back-button">
+            ← Back to Launch Pad
+          </button>
+        </div>
           <div id='component'>
           <h2>Inventory</h2>
           <input
@@ -79,7 +81,7 @@ const Inventory: React.FC = () => {
                   onChange={(e) => handleRestockChange(item.name, Number(e.target.value))}
                   style={{ marginLeft: '10px', width: '80px' }}
                 />
-                <button onClick={() => handleRestock(item.name)}>Restock</button>
+                <button id='general-button' onClick={() => handleRestock(item.name)}>Restock</button>
               </li>
             ))}
           </ul>

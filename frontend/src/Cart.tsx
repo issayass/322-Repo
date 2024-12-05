@@ -8,7 +8,7 @@ const DEFAULT_TIP_PERCENTAGE = 0.15; // 15% tip by default
 
 const Cart: React.FC = () => {
   const navigate = useNavigate();
-  const { cartItems, clearCart } = useContext(CartContext);
+  const { cartItems, clearCart, updateCartItem } = useContext(CartContext);
 
   const [tipPercentage, setTipPercentage] = useState<number>(DEFAULT_TIP_PERCENTAGE);
   const [discountCode, setDiscountCode] = useState<string>('');
@@ -27,6 +27,22 @@ const Cart: React.FC = () => {
     } else {
       alert('Invalid discount code!');
       setDiscountAmount(0);
+    }
+  };
+
+  const handleIncrement = (itemName: string) => {
+    const item = cartItems.find((item) => item.name === itemName);
+    if (item) 
+    {
+      updateCartItem(itemName, item.quantity + 1); // Increment quantity by 1
+    }
+  };
+
+  const handleDecrement = (itemName: string) => {
+    const item = cartItems.find((item) => item.name === itemName);
+    if (item) 
+    {
+      updateCartItem(itemName, Math.max(1, item.quantity - 1)); // Decrement but not below 1
     }
   };
 
@@ -54,9 +70,11 @@ const Cart: React.FC = () => {
 
   return (
     <div id="wrapper">
-      <button id="return-button" className="return-button" onClick={() => navigate('/menu')}>
-        ← Back to Menu
-      </button>
+      <div id="return-button">
+        <button className="back-button" onClick={() => navigate('/menu')}>
+          ← Back to Menu
+        </button>
+      </div>
       <div id="component" className="cart">
         <h1 className="heading">Cart</h1>
         {cartItems.length === 0 ? (
@@ -67,6 +85,8 @@ const Cart: React.FC = () => {
               {cartItems.map((item) => (
                 <li key={item.name}>
                   {item.name} x {item.quantity} - ${item.price * item.quantity}
+                  <button id='general-button' onClick={() => handleIncrement(item.name)}>Add</button>
+                  <button id='general-button' onClick={() => handleDecrement(item.name)}>Remove</button>
                 </li>
               ))}
             </ul>
@@ -93,14 +113,14 @@ const Cart: React.FC = () => {
                   placeholder="Enter discount code"
                   style={{ marginRight: '10px' }}
                 />
-                <button onClick={handleApplyDiscount}>Apply Discount</button>
+                <button id='general-button' onClick={handleApplyDiscount}>Apply Discount</button>
               </div>
               {discountAmount > 0 && (
                 <p>Discount Applied: -${discountAmount.toFixed(2)}</p>
               )}
               <p className="total">Total After Discount: ${Math.max(0, totalAfterDiscount).toFixed(2)}</p>
             </div>
-            <button onClick={handlePlaceOrder}>Place Order</button>
+            <button id='general-button' onClick={handlePlaceOrder}>Place Order</button>
           </>
         )}
       </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 import './style.css';
 
 interface Order {
@@ -12,11 +13,40 @@ interface Order {
 const OrderNotification: React.FC = () => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
+  
+  const { role } = useAuth();
 
   useEffect(() => {
     const storedOrders = JSON.parse(localStorage.getItem('orders') || '[]');
     setOrders(storedOrders);
   }, []);
+
+  const handleUpdateStatus = (id: number) => {
+  const updatedOrders = orders.map((order) => {
+    if (order.id === id) {
+      let newStatus = order.status;
+      if (order.status === 'Pending') 
+      {
+        newStatus = 'Preparing';
+      }
+      else if (order.status === 'Preparing') 
+      {
+        newStatus = 'Complete';
+      }
+      return { ...order, status: newStatus };
+    }
+    return order;
+  });
+
+  setOrders(updatedOrders);
+  localStorage.setItem('orders', JSON.stringify(updatedOrders));
+  };
+
+  const handleRemove = (orderToRemove: Order) => {
+    const updatedOrders = orders.filter((order) => order.id !== orderToRemove.id);
+    setOrders(updatedOrders);
+    localStorage.setItem('orders', JSON.stringify(updatedOrders));
+  };
 
   return (
     <div id="wrapper">
@@ -30,6 +60,12 @@ const OrderNotification: React.FC = () => {
               <li key={order.id}>
                 <h2>Order #{order.id}</h2>
                 <p>Status: {order.status}</p>
+                {(role !== 'guest' && (
+                  <button id="button-grid-button" onClick={() => handleUpdateStatus(order.id)}>Update</button>
+                ))}
+                {(role === 'admin' && (
+                  <button id='button-grid-button' onClick={() => handleRemove(order)}>Remove</button>
+                ))}
                 <p>Subtotal: ${order.subtotal}</p>
                 <ul>
                   {order.items.map((item, index) => (
@@ -42,9 +78,11 @@ const OrderNotification: React.FC = () => {
             ))}
           </ul>
         )}
-        <button onClick={() => navigate('/launchpad')} className="back-button">
-          Return to Main Menu
-        </button>
+        <div id='return-button'>
+          <button onClick={() => navigate('/launchpad')} className="back-button">
+            Return to Main Menu
+          </button>
+        </div>
       </div>
     </div>
   );

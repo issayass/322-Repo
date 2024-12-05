@@ -10,12 +10,14 @@ interface CartItem {
 interface CartContextProps {
   cartItems: CartItem[];
   addToCart: (item: { name: string; price: number }) => void;
+  updateCartItem: (itemName: string, quantity: number) => void;
   clearCart: () => void;
 }
 
 export const CartContext = createContext<CartContextProps>({
   cartItems: [],
   addToCart: () => {},
+  updateCartItem: () => {},
   clearCart: () => {},
 });
 
@@ -41,12 +43,22 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     });
   };
 
+  const updateCartItem = (itemName: string, quantity: number) => {
+    setCartItems((prevCartItems) =>
+      prevCartItems.map((cartItem) =>
+        cartItem.name === itemName
+          ? { ...cartItem, quantity: Math.max(0, quantity) } // Ensure quantity is non-negative
+          : cartItem
+      ).filter((cartItem) => cartItem.quantity > 0) // Remove items with quantity 0
+    );
+  };
+
   const clearCart = () => {
     setCartItems([]);
   };
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, clearCart }}>
+    <CartContext.Provider value={{ cartItems, addToCart, updateCartItem, clearCart }}>
       {children}
     </CartContext.Provider>
   );

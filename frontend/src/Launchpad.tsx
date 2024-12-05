@@ -9,7 +9,7 @@ const LaunchPad: React.FC = () => {
 
   return (
     <div id="wrapper">
-      <button id="return-button" onClick={() => navigate('/login')}>
+      <button id="login-button" onClick={() => navigate('/login')}>
         Log In / Sign Up
       </button>
       <div id="component">
