@@ -1,0 +1,10 @@
+
+{
+    "inventory": [
+      { "name": "Rice", "quantity": 50, "unit": "kg" },
+      { "name": "Chicken", "quantity": 20, "unit": "kg" },
+      { "name": "Broccoli", "quantity": 15, "unit": "kg" },
+      { "name": "Soy Sauce", "quantity": 10, "unit": "L" }
+    ]
+  }
+  

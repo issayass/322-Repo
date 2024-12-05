@@ -9,6 +9,7 @@ import Inventory from './Inventory.tsx';
 import Cart from './Cart';
 import PrivateRoute from './PrivateRoute';
 import Register from './Register';
+import CustomizeDish from './CustomizeDish.tsx';
 
 const AppRouter: React.FC = () => {
   return (
@@ -29,6 +30,14 @@ const AppRouter: React.FC = () => {
         element={
           <PrivateRoute>
             <Menu />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path='/customizedish'
+        element={
+          <PrivateRoute>
+            <CustomizeDish />
           </PrivateRoute>
         }
       />
