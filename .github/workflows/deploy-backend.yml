@@ -64,13 +64,19 @@ jobs:
         run: |
           docker save harrysdiner-backend:latest > harrysdiner-backend.tar
 
+      # 4.5: Create SSH key file in order to work with permissions.
+      - name: Create SSH key file
+        run: |
+          echo "${{ env.EC2_SSH_KEY }}" > ec2-key.pem
+          chmod 600 ec2-key.pem
+
       # 5: Copy Docker image to EC2.
       - name: Copy Docker image to EC2
         uses: appleboy/scp-action@v0.1.2
         with:
           host: ${{ env.EC2_HOST }}
           username: ${{ env.EC2_USER }}
-          key: ${{ env.EC2_SSH_KEY }}
+          key: ec2-key.pem
           source: harrysdiner-backend.tar
           target: /home/${{ env.EC2_USER }}
 
@@ -80,7 +86,7 @@ jobs:
         with:
           host: ${{ env.EC2_HOST }}
           username: ${{ env.EC2_USER }}
-          key: ${{ env.EC2_SSH_KEY }}
+          key: ec2-key.pem
           script: |
             docker load < /home/${{ env.EC2_USER }}/harrysdiner-backend.tar
             docker stop harrysdiner-backend || true
