@@ -22,7 +22,16 @@ import inventoryRoutes from './routes/inventoryRoutes';
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+
+const corsOptions = {
+    origin: ['http://localhost:5173', 'https://effulgent-longma-fd621a.netlify.app'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+}
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
