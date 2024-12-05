@@ -1,3 +1,7 @@
+# remove docker files
+docker-compose-override.yml
+*.env
+
 # remove javascript files (typescript only)
 *.js
 
