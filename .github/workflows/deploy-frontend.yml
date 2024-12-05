@@ -1,0 +1,42 @@
+name: Build and Deploy Frontend to Netlify
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1: Check out repository.
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2: Set up Node.js.
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      # 3: Install dependencies.
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      # 4: Build the application.
+      - name: Build application
+        working-directory: ./frontend
+        run: npm run build
+
+      # 5: Deploy to Netlify
+      - name: Deploy to Netlify
+        env:
+          NETLIFY_AUTH_TOKEN: nfp_NAnty92z3qnRitVjk19AVPPn3b6GJXDQc815
+          NETLIFY_SITE_ID: e619b41c-4b1b-4858-9cac-7f7c8dd83949
+        working-directory: ./frontend
+        run: |
+          npm install -g netlify-cli
+          netlify deploy --prod --dir=dist --site=$NETLIFY_SITE_ID
