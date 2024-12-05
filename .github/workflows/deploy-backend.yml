@@ -5,6 +5,42 @@ on:
     branches:
       - main
 
+# Temporary, I don't have access to add secrets to the GitHub repo
+# and nobody can harm me by having access to my EC2 instance, maybe
+# just crash the server.
+env:
+  EC2_HOST: 3.145.154.168
+  EC2_USER: ec2-user
+  EC2_SSH_KEY: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEpgIBAAKCAQEA1QhizmtVCFLjzqvTiHGblv+JFyQHc6ei5nfNB54JqJrX5n6D
+    FaEjwzgKL1UVkZMNvN7S73R+P50jih7WMFXBWM+jJ3luwMxStZrBa2vcwFYWnGCh
+    J4LGVmpaK7Ve03gQKw/6slC/nphW/feYmqi2uFiax3X1L7pzrHtWVeu2ElDTCom9
+    9q35SUU+yMF9CU3Q4bXHMWLgr7qxJNglg8LiOm9FuVsalzySEm/44T397kLPrdeV
+    94F185e6UE7tOUCp8RTIVMWcjZJHnn+Oh6VeE73tJE+RTkhcEpSN/3uTO05Gejam
+    WW5M/fZUpo10WYlpnqWMYBO5C3lSiY/C4E/7UwIDAQABAoIBAQCVm4sQXg5chyHX
+    PZKT6v0SwSi8qJ/XGC5t3kqOA+3Si9P92nEimoTsD4oPjZhVIMnwDyhh5BTZhfi0
+    gk13qnHbdg6lpUEjgxq+0Qzu7NQd+xdsAOyMO+ogPBZRRdFvf40TQOiVm+HGdkP5
+    nY19Z+jSc99XHr7vIukjg4axVpUKLJLM0uWu3JbtxQeAIYFuKwOHj5EIYHrR2tnP
+    TJQ6JtuiTd9+04W32TX55eHf9DQSZuFJ1/9YoLs4fU/ItEM65kdzFYYryL+0sspy
+    xGUIgIUhq3EMbbHuCd37plr2J52JgbAw6ffTR/cyFY2boU36NUJFzqUFvOERBpMh
+    w5abAeKhAoGBAO0vJlPW4HVBA100KrKEvzkE9EPrZO2nwsKqoau1OdpLgsBJrt5V
+    QbdJKmobJpi9pCOyZ34hu6cHR17zyuKvcyzIum9a5xe5nyLqXXo4lVinnuMZzxQN
+    EVA/cpVGjBb8XDM6Ok0aSvpvsQR3kR/0RnDdFleYcT7vi6ys1QCZ1cHjAoGBAOXu
+    wfD0Apdkauaebx+7gOJTZw0wNpDZ2T3BKAtnfsJBOZHi1oK2RONvUKwX0Pd0oQgq
+    fKPun8fJG5kS58s+xA8c954ATK+/t6H0ohmTqeJ37TWG6En5CRozPAKnVWAVdLjB
+    WEVZajoIIPMFdXRGc4hVKIMnkmuGinewRcAha1vRAoGBAL54D6piM2xV4jK10tf7
+    XGiYvuPQJAPppbCYQC5Y4XWZEA4E3eXzx0s9+U6uMQeVuztjaFLVGhHe+YSZ+MKj
+    rLU5GOaVtGDMEqyCUsD0sZI5QZIURsROXin4WbbgqV1IGW6WAv2p8K4+hYQV1Lg5
+    fVvjX67GX6Lv0VXAkWjjINKLAoGBALSxEnv2ZervIQsmypEXWsuBW2SD1P20FQJw
+    vrVnmbeyZjl9F7IU5sIMgksbVD6CyuGN8fEp3yqzohqDPuD77DssOnNSLPGYKgj+
+    JD0RS9oLAMClyfoH2N1cEfbL5U3izp06Y9Hr2IzOQoZ4bbr4emZS9clL2cbiLgKs
+    5cN8/89hAoGBAJoL2m3JTAS5w4s9r2rbXvSSmuGaBG1bvhdmFB6fT01LxK0GJznR
+    Bud4ctwD3yo4ZlOcGRwXsfOOhRG9hB8Oo9GbPR0Of6IC96rIccu/UO76jVONRHDk
+    z1oZvrurFSfBks1RiAKJkjFcCof1q7OFbPlRJ1l6NqYudWFrIXVf1oNL
+    -----END RSA PRIVATE KEY-----
+  APP_PORT: 3002
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -32,21 +68,21 @@ jobs:
       - name: Copy Docker image to EC2
         uses: appleboy/scp-action@v0.1.2
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ env.EC2_HOST }}
+          username: ${{ env.EC2_USER }}
+          key: ${{ env.EC2_SSH_KEY }}
           source: harrysdiner-backend.tar
-          target: /home/${{ secrets.EC2_USER }}
+          target: /home/${{ env.EC2_USER }}
 
       # 6: Load Docker image and start container on EC2.
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.6
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ env.EC2_HOST }}
+          username: ${{ env.EC2_USER }}
+          key: ${{ env.EC2_SSH_KEY }}
           script: |
-            docker load < /home/${{ secrets.EC2_USER }}/harrysdiner-backend.tar
+            docker load < /home/${{ env.EC2_USER }}/harrysdiner-backend.tar
             docker stop harrysdiner-backend || true
             docker rm harrysdiner-backend || true
-            docker run -d -p ${{ secrets.APP_PORT }}:3002 --name harrysdiner-backend harrysdiner-backend:latest
+            docker run -d -p ${{ env.APP_PORT }}:3002 --name harrysdiner-backend harrysdiner-backend:latest
