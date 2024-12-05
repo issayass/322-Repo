@@ -4,7 +4,7 @@ Welcome to Harry's Diner, a web application designed to manage restaurant operat
 
 ## **Live Demo**
 
-- **Frontend URL**: https://github.com/issayass/HarrysDiner.github.io/new/main?filename=README.md
+- **Frontend URL**: https://effulgent-longma-fd621a.netlify.app
 - **Backend URL**: 3.145.154.168
 
 ## **About the Project**
