@@ -14,9 +14,9 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (email === 'a@a.com' && password === 'pw') {
+    if (email === 'admin@staff.com' && password === 'admin') {
       setRole('admin'); 
-    } else if (email === 'kitchen@staff.com' && password === 'staff') {
+    } else if (email === 'kitchen@staff.com' && password === 'kitchen') {
       setRole('staff'); 
     } else {
       alert('Invalid email or password');
