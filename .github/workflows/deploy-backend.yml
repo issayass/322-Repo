@@ -84,13 +84,10 @@ jobs:
 
       # 6: Load Docker image and start container on EC2.
       - name: Deploy on EC2
-        uses: appleboy/ssh-action@v0.1.6
-        with:
-          host: ${{ env.EC2_HOST }}
-          username: ${{ env.EC2_USER }}
-          key_path: ec2-key.pem
-          script: |
-            docker load < /home/${{ env.EC2_USER }}/harrysdiner-backend.tar
-            docker stop harrysdiner-backend || true
-            docker rm harrysdiner-backend || true
-            docker run -d -p ${{ env.APP_PORT }}:3002 --name harrysdiner-backend harrysdiner-backend:latest
+        run: |
+          ssh -i $HOME/.ssh/id_rsa ${{ env.EC2_USER }}@${{ env.EC2_HOST }} << 'EOF'
+          docker load < ~/harrysdiner-backend.tar
+          docker stop harrysdiner-backend || true
+          docker rm harrysdiner-backend || true
+          docker run -d -p 3002:3002 --name harrysdiner-backend harrysdiner-backend:latest
+          EOF
