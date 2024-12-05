@@ -80,7 +80,7 @@ jobs:
         with:
           host: ${{ env.EC2_HOST }}
           username: ${{ env.EC2_USER }}
-          key: ec2-key.pem
+          key_path: ec2-key.pem
           source: harrysdiner-backend.tar
           target: /home/${{ env.EC2_USER }}
 
@@ -90,7 +90,7 @@ jobs:
         with:
           host: ${{ env.EC2_HOST }}
           username: ${{ env.EC2_USER }}
-          key: ec2-key.pem
+          key_path: ec2-key.pem
           script: |
             docker load < /home/${{ env.EC2_USER }}/harrysdiner-backend.tar
             docker stop harrysdiner-backend || true
