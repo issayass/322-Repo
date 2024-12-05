@@ -36,7 +36,7 @@ const Menu: React.FC = () => {
     <div id="wrapper">
       <div id="return-button">
         <button onClick={() => navigate('/launchpad')} className="back-button">
-          ← Back to Launch Pad
+          ← Back to Main Menu
         </button>
       </div>
       <div id="component">

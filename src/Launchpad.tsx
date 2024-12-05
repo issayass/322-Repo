@@ -1,9 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 import './style.css';
 
 const LaunchPad: React.FC = () => {
   const navigate = useNavigate();
+  const { role } = useAuth();
 
   return (
     <div id="wrapper">
@@ -11,14 +13,17 @@ const LaunchPad: React.FC = () => {
         Log In / Sign Up
       </button>
       <div id="component">
-        <h2 className="welcome-text">Welcome to the Restaurant App</h2>
+        <h2 className="welcome-text">Welcome to the Harry's Diner!</h2>
         <div id="button-grid">
           <button id="button-grid-button" onClick={() => navigate('/menu')}>
             Menu
           </button>
-          <button id="button-grid-button" onClick={() => navigate('/inventory')}>
-            Inventory
-          </button>
+          {role === 'admin' && (
+            <button id="button-grid-button" onClick={() => navigate('/inventory')}>
+              Inventory
+            </button>
+          )}
+
           <button id="button-grid-button" onClick={() => navigate('/order-notification')}>
             See Order Notification
           </button>
