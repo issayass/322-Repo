@@ -46,6 +46,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # DEBUGGING
+      - name: Debugging SSH key
+        run: echo "${{ env.EC2_SSH_KEY }}"
+    
       # 1: Check out repository.
       - name: Checkout repository
         uses: actions/checkout@v3
