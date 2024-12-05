@@ -1,8 +1,7 @@
-
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from './CartContext';
-import './style.css'
+import './style.css';
 
 interface MenuItem {
   name: string;
@@ -11,9 +10,8 @@ interface MenuItem {
 
 const Menu: React.FC = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-  const [notification, setNotification] = useState<string | null>(null);
-  const { addToCart } = useContext(CartContext); 
-  const navigate = useNavigate(); 
+  const { addToCart } = useContext(CartContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -31,20 +29,18 @@ const Menu: React.FC = () => {
 
   const handleAddToCart = (item: MenuItem) => {
     addToCart(item);
-    setNotification(`${item.name} has been added to your cart!`);
-    setTimeout(() => setNotification(null), 1000);
+    navigate('/cart-confirmation'); // Redirect to the confirmation page
   };
 
   return (
-    <div id='wrapper'>
-      <div id='return-button'>
+    <div id="wrapper">
+      <div id="return-button">
         <button onClick={() => navigate('/launchpad')} className="back-button">
           ← Back to Launch Pad
         </button>
       </div>
       <div id="component">
         <h2>Menu</h2>
-        {notification && <div className="notification">{notification}</div>}
         <ul>
           {menuItems.map((item, index) => (
             <li key={index}>
