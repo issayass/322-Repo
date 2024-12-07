@@ -22,9 +22,7 @@ const Inventory: React.FC = () => {
     const fetchInventory = async () => {
       try {
         const response = await axiosInstance.get('/inventory');
-        // Based on your backend response structure, adjust as needed:
-        // If the backend returns { message: string, items: InventoryItem[] }
-        // then do:
+        
         setInventory(response.data.items || []);
       } catch (error) {
         console.error('Error fetching inventory data:', error);
