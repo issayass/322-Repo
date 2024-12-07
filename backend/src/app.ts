@@ -1,8 +1,6 @@
 /**
  
-
-    Copyright (c) ...*/
-
+Copyright (c) ...*/
 
 // Express Imports
 import express from 'express';
