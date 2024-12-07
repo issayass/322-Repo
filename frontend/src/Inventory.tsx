@@ -1,16 +1,19 @@
-// src/Inventory.tsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './style.css'
+import axiosInstance from './axiosInstance';
 
 interface InventoryItem {
+  id: number;
+  ingredientID: string;
   name: string;
   quantity: number;
-  unit: string;
+  unitPrice: number;
+  expirationDate: string;
 }
 
 const Inventory: React.FC = () => {
-  const navigate = useNavigate(); // Import and use useNavigate
+  const navigate = useNavigate();
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [restockAmounts, setRestockAmounts] = useState<{ [key: string]: number }>({});
@@ -18,9 +21,11 @@ const Inventory: React.FC = () => {
   useEffect(() => {
     const fetchInventory = async () => {
       try {
-        const response = await fetch('/inventoryData.json');
-        const data = await response.json();
-        setInventory(data.inventory);
+        const response = await axiosInstance.get('/inventory');
+        // Based on your backend response structure, adjust as needed:
+        // If the backend returns { message: string, items: InventoryItem[] }
+        // then do:
+        setInventory(response.data.items || []);
       } catch (error) {
         console.error('Error fetching inventory data:', error);
       }
@@ -39,14 +44,24 @@ const Inventory: React.FC = () => {
     }));
   };
 
-  const handleRestock = (itemName: string) => {
+  const handleRestock = async (itemName: string) => {
+    const item = inventory.find((inv) => inv.name === itemName);
+    if (!item) return;
     const amount = restockAmounts[itemName] || 0;
-    setInventory((prevInventory) =>
-      prevInventory.map((item) =>
-        item.name === itemName ? { ...item, quantity: item.quantity + amount } : item
-      )
-    );
-    setRestockAmounts((prevAmounts) => ({ ...prevAmounts, [itemName]: 0 })); // Reset restock amount after updating
+
+    try {
+      await axiosInstance.put(`/inventory/${item.id}`, {
+        quantity: item.quantity + amount,
+      });
+      setInventory((prevInventory) =>
+        prevInventory.map((invItem) =>
+          invItem.name === itemName ? { ...invItem, quantity: invItem.quantity + amount } : invItem
+        )
+      );
+      setRestockAmounts((prevAmounts) => ({ ...prevAmounts, [itemName]: 0 }));
+    } catch (error) {
+      console.error('Error updating inventory:', error);
+    }
   };
 
   const filteredInventory = inventory.filter((item) =>
@@ -57,11 +72,11 @@ const Inventory: React.FC = () => {
     <div id='wrapper'>
       <div className="inventory">
         <div id='return-button'>
-          <button  onClick={() => navigate('/launchpad')} className="back-button">
+          <button onClick={() => navigate('/launchpad')} className="back-button">
             ← Back to Launch Pad
           </button>
         </div>
-          <div id='component'>
+        <div id='component'>
           <h2>Inventory</h2>
           <input
             type="text"
@@ -72,7 +87,7 @@ const Inventory: React.FC = () => {
           <ul>
             {filteredInventory.map((item, index) => (
               <li key={index}>
-                {item.name} - {item.quantity} {item.unit}
+                {item.name} - {item.quantity} units
                 <input
                   type="number"
                   min="1"
@@ -92,3 +107,4 @@ const Inventory: React.FC = () => {
 };
 
 export default Inventory;
+

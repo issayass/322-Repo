@@ -1,9 +1,8 @@
 /**
- * Copyright (c) CPTS 322 Harry's Diner Project
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
+ 
+
+    Copyright (c) ...*/
+
 
 // Express Imports
 import express from 'express';
@@ -23,19 +22,24 @@ const app = express();
 
 app.use(express.json());
 
-const allowedOrigins = ['http://localhost:5173', 'https://effulgent-longma-fd621a.netlify.app']
+const allowedOrigins = [
+  'http://localhost:5173/', 
+  'https://effulgent-longma-fd621a.netlify.app/',
+  'https://issayass.github.io/HarrysDiner.github.io' // Added GitHub Pages domain
+];
 
 app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
 app.options('*', cors());
 
 app.use('/auth', authRoutes);
