@@ -3,7 +3,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://3.145.154.168',
+  baseURL: 'https://harrysdiner.hopto.org/',
   headers: {
     'Content-Type': 'application/json',
   },
