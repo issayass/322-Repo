@@ -1,7 +1,7 @@
 import React, { useState, FormEvent, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-//import axiosInstance from './axiosInstance';
-import { AuthContext, useAuth} from './AuthContext';
+import { AuthContext, useAuth } from './AuthContext';
+import axiosInstance from './axiosInstance';
 import './style.css';
 
 const Login: React.FC = () => {
@@ -14,30 +14,34 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (email === 'admin@staff.com' && password === 'admin') {
-      setRole('admin'); 
-    } else if (email === 'kitchen@staff.com' && password === 'kitchen') {
-      setRole('staff'); 
-    } else {
-      alert('Invalid email or password');
-    }
-
-    setAuthToken('mockToken'); 
-    navigate('/launchpad');
-
-    /*
     try {
       const response = await axiosInstance.post('/auth/login', {
         email,
         password,
       });
-      const { token } = response.data;
-      setAuthToken(token);
-      navigate('/launchpad');
+      
+      const { token, user } = response.data;
+
+      if (token) {
+        setAuthToken(token);
+
+        // Set role based on user data if available (this depends on your backend logic)
+        // For example, if `user` has a property `manager` or `staff` you can derive the role:
+        if (user.manager) {
+          setRole('admin');
+        } else if (user.staff && user.staff.length > 0) {
+          setRole('staff');
+        } else {
+          setRole('guest');
+        }
+
+        navigate('/launchpad');
+      } else {
+        alert('Invalid email or password');
+      }
     } catch (error) {
       alert('Invalid email or password');
     }
-    */
   };
 
   return (
@@ -46,14 +50,16 @@ const Login: React.FC = () => {
         <h2>Welcome to Harry's Diner!</h2>
         <p>Enter your account email and password to log in.</p>
         <form onSubmit={handleSubmit}>
-          <input id='input'
+          <input
+            id='input'
             type="email"
             placeholder="your.email@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <input id='input'
+          <input
+            id='input'
             type="password"
             placeholder="ExamplePassword"
             value={password}
