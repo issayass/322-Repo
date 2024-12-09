@@ -5,6 +5,7 @@ model User {
   password      String
   name          String
   email         String         @unique
+  isAdmin       Boolean        @default(false)
   notifications Notification[]
   staff         Staff[]
   customer      Customer?

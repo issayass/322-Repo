@@ -1,3 +1,5 @@
+// frontend/src/Login.tsx
+
 import React, { useState, FormEvent, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext, useAuth } from './AuthContext';
@@ -21,24 +23,15 @@ const Login: React.FC = () => {
       });
       
       const { token, user } = response.data;
+      setAuthToken(token);
 
-      if (token) {
-        setAuthToken(token);
-
-        // Set role based on user data if available (this depends on your backend logic)
-        // For example, if `user` has a property `manager` or `staff` you can derive the role:
-        if (user.manager) {
-          setRole('admin');
-        } else if (user.staff && user.staff.length > 0) {
-          setRole('staff');
-        } else {
-          setRole('guest');
-        }
-
-        navigate('/launchpad');
+      if (user.isAdmin) {
+        setRole('admin');
       } else {
-        alert('Invalid email or password');
+        setRole('guest');
       }
+
+      navigate('/launchpad');
     } catch (error) {
       alert('Invalid email or password');
     }
