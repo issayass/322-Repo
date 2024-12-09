@@ -28,13 +28,6 @@ import { createUserSchema, toUserDTO } from '../models/userModel';
 
 /**
  * Controller to fetch all users.
- *
- * @param {Request} req - The Express request object.
- * @param {Response} res - The Express response object.
- *
- * @description
- * Retrives all users from the database, removes the password property from
- * them, and sends the result as a JSON response.
  */
 export const getUsers = async (req: Request, res: Response) => {
   try {
@@ -45,6 +38,7 @@ export const getUsers = async (req: Request, res: Response) => {
     );
 
     res.json(userDTOs);
+    return;
   } catch (error: unknown) {
     let message = 'Failed to fetch users.';
 
@@ -53,18 +47,12 @@ export const getUsers = async (req: Request, res: Response) => {
     }
 
     res.status(500).json({ error: message });
+    return;
   }
 };
 
 /**
  * Controller to fetch a single user.
- *
- * @param {Request} req - The Express request object.
- * @param {Response} res - The Express response object.
- *
- * @description
- * Retrives a single user from the database from an ID number. Removes the
- * password property from the user and sends the user as a JSON response.
  */
 export const getUser = async (req: Request, res: Response) => {
   try {
@@ -79,6 +67,7 @@ export const getUser = async (req: Request, res: Response) => {
     const userDTO = toUserDTO(user);
 
     res.json(userDTO);
+    return;
   } catch (error: unknown) {
     let message = 'Failed to fetch user.';
 
@@ -87,19 +76,12 @@ export const getUser = async (req: Request, res: Response) => {
     }
 
     res.status(500).json({ error: message });
+    return;
   }
 };
 
 /**
  * Controller to create a new user.
- *
- * @param {Request} req - The Express request object.
- * @param {Response} res - The Express repsonse object.
- *
- * @description
- * Creates a new user in the database when given at least a username, email,
- * and a password. Validates with Zod and then sends the newly created user
- * object without the password as a JSON response.
  */
 export const createUserHandler = async (req: Request, res: Response) => {
   try {
@@ -110,6 +92,7 @@ export const createUserHandler = async (req: Request, res: Response) => {
     const userDTO = toUserDTO(newUser);
 
     res.status(201).json(userDTO);
+    return;
   } catch (error: unknown) {
     let statusCode = 500;
     let message = 'Failed to create user.';
@@ -127,19 +110,12 @@ export const createUserHandler = async (req: Request, res: Response) => {
     }
 
     res.status(statusCode).json({ error: message });
+    return;
   }
 };
 
 /**
  * Controller to update an existing user.
- *
- * @param {Request} req - The Express request object.
- * @param {Response} res - The Express response object.
- *
- * @description
- * Updates an existing user in the database when given an ID and some
- * properties of the user model. Sends the updated user without the password as
- * a JSON response.
  */
 export const updateUserHandler = async (req: Request, res: Response) => {
   try {
@@ -153,6 +129,7 @@ export const updateUserHandler = async (req: Request, res: Response) => {
     }
 
     res.json(toUserDTO(updatedUser));
+    return;
   } catch (error: unknown) {
     let message = 'Failed to update user.';
 
@@ -161,18 +138,12 @@ export const updateUserHandler = async (req: Request, res: Response) => {
     }
 
     res.status(500).json({ error: message });
+    return;
   }
 };
 
 /**
  * Controller to delete an existing user.
- *
- * @param {Request} req - The Express request object.
- * @param {Response} res - The Express response object.
- *
- * @description
- * Deletes an existing user from the database when given an ID. Sends a
- * success message if the user was deleted, else an error.
  */
 export const deleteUserHandler = async (req: Request, res: Response) => {
   try {
@@ -180,9 +151,7 @@ export const deleteUserHandler = async (req: Request, res: Response) => {
 
     // A user can only delete themselves.
     if (req.user?.id !== userId) {
-      res
-        .status(403)
-        .json({ error: 'You are not authorized to delete this user.' });
+      res.status(403).json({ error: 'You are not authorized to delete this user.' });
       return;
     }
 
@@ -194,6 +163,7 @@ export const deleteUserHandler = async (req: Request, res: Response) => {
     }
 
     res.json({ message: 'User deleted successfully.' });
+    return;
   } catch (error: unknown) {
     let message = 'Failed to delete user.';
 
@@ -202,5 +172,6 @@ export const deleteUserHandler = async (req: Request, res: Response) => {
     }
 
     res.status(500).json({ error: message });
+    return;
   }
 };

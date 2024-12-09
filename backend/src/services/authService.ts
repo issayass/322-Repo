@@ -1,20 +1,7 @@
-/**
- * Copyright (c) CPTS 322 Harry's Diner Project
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
+// backend/src/services/authService.ts
 
-// BCrypt Imports
 import bcrypt from 'bcryptjs';
-
-// Prisma Client Imports
 import prisma from '../utils/prismaClient';
-
-// Service (User Model) Imports
-import { createUser } from '../services/userService';
-
-// Utility Imports
 import { signToken } from '../utils/jwtUtils';
 
 export const registerUser = async (data: {
@@ -24,9 +11,16 @@ export const registerUser = async (data: {
 }) => {
   const hashedPassword = await bcrypt.hash(data.password, 10);
 
-  return createUser({
-    ...data,
-    password: hashedPassword,
+  // Check if email ends with '@admin.com'
+  const isAdmin = data.email.endsWith('@admin.com');
+
+  return prisma.user.create({
+    data: {
+      email: data.email,
+      name: data.name,
+      password: hashedPassword,
+      isAdmin: isAdmin,
+    },
   });
 };
 
@@ -45,7 +39,7 @@ export const loginUser = async (email: string, password: string) => {
     throw new Error('Invalid email or password.');
   }
 
-  const token = signToken({ id: user.id, email: user.email });
+  const token = signToken({ id: user.id, email: user.email, isAdmin: user.isAdmin });
 
   return { token, user };
 };

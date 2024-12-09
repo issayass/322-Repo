@@ -1,10 +1,3 @@
-/**
- * Copyright (c) CPTS 322 Harry's Diner Project
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
 import { Router } from 'express';
 import {
   getAllInventory,
@@ -12,13 +5,17 @@ import {
   updateInventory,
   deleteInventory,
 } from '../controllers/inventoryController';
+import { authenticate } from '../middleware/auth';
+import { requireAdmin } from '../middleware/requireAdmin';
 
 const router = Router();
 
-// Routes for inventory management
-router.get('/', getAllInventory); // Get all inventory items
-router.post('/', createInventory); // Create a new inventory item
-router.put('/:id', updateInventory); // Update an existing inventory item
-router.delete('/:id', deleteInventory); // Delete an inventory item
+// Authenticated users can view inventory
+router.get('/', authenticate, getAllInventory);
+
+// Only admins can create, update, or delete inventory
+router.post('/', authenticate, requireAdmin, createInventory);
+router.put('/:id', authenticate, requireAdmin, updateInventory);
+router.delete('/:id', authenticate, requireAdmin, deleteInventory);
 
 export default router;

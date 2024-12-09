@@ -18,18 +18,23 @@ const Inventory: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [restockAmounts, setRestockAmounts] = useState<{ [key: string]: number }>({});
 
+  // Fields for adding a new inventory item
+  const [newIngredientID, setNewIngredientID] = useState('');
+  const [newName, setNewName] = useState('');
+  const [newQuantity, setNewQuantity] = useState<number | ''>('');
+  const [newUnitPrice, setNewUnitPrice] = useState<number | ''>('');
+  const [newExpirationDate, setNewExpirationDate] = useState('');
+
+  const fetchInventory = async () => {
+    try {
+      const response = await axiosInstance.get('/inventory');
+      setInventory(response.data.items || []);
+    } catch (error) {
+      console.error('Error fetching inventory data:', error);
+    }
+  };
+
   useEffect(() => {
-    const fetchInventory = async () => {
-      try {
-        const response = await axiosInstance.get('/inventory');
-        // Based on your backend response structure, adjust as needed:
-        // If the backend returns { message: string, items: InventoryItem[] }
-        // then do:
-        setInventory(response.data.items || []);
-      } catch (error) {
-        console.error('Error fetching inventory data:', error);
-      }
-    };
     fetchInventory();
   }, []);
 
@@ -68,6 +73,43 @@ const Inventory: React.FC = () => {
     item.name.toLowerCase().includes(searchTerm)
   );
 
+  const handleAddIngredient = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (
+      !newIngredientID.trim() ||
+      !newName.trim() ||
+      newQuantity === '' ||
+      newUnitPrice === '' ||
+      !newExpirationDate.trim()
+    ) {
+      alert('Please fill in all fields before adding the ingredient.');
+      return;
+    }
+
+    try {
+      await axiosInstance.post('/inventory', {
+        ingredientID: newIngredientID,
+        name: newName,
+        quantity: Number(newQuantity),
+        unitPrice: Number(newUnitPrice),
+        expirationDate: newExpirationDate,
+      });
+
+      // Reset fields
+      setNewIngredientID('');
+      setNewName('');
+      setNewQuantity('');
+      setNewUnitPrice('');
+      setNewExpirationDate('');
+
+      // Refresh inventory
+      fetchInventory();
+    } catch (error) {
+      console.error('Error adding inventory item:', error);
+    }
+  };
+
   return (
     <div id='wrapper'>
       <div className="inventory">
@@ -78,12 +120,71 @@ const Inventory: React.FC = () => {
         </div>
         <div id='component'>
           <h2>Inventory</h2>
+          {/* Add Inventory Ingredient Form */}
+          <form onSubmit={handleAddIngredient} style={{ marginBottom: '20px' }}>
+            <h3>Add New Ingredient</h3>
+            <div>
+              <label>Ingredient ID:</label>
+              <input
+                type="text"
+                value={newIngredientID}
+                onChange={(e) => setNewIngredientID(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label>Name:</label>
+              <input
+                type="text"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label>Quantity:</label>
+              <input
+                type="number"
+                min="0"
+                value={newQuantity}
+                onChange={(e) => setNewQuantity(e.target.value === '' ? '' : Number(e.target.value))}
+                required
+              />
+            </div>
+            <div>
+              <label>Unit Price:</label>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={newUnitPrice}
+                onChange={(e) => setNewUnitPrice(e.target.value === '' ? '' : Number(e.target.value))}
+                required
+              />
+            </div>
+            <div>
+              <label>Expiration Date (ISO 8601):</label>
+              <input
+                type="text"
+                placeholder="YYYY-MM-DDTHH:MM:SS.000Z"
+                value={newExpirationDate}
+                onChange={(e) => setNewExpirationDate(e.target.value)}
+                required
+              />
+            </div>
+            <button type="submit" id='general-button' style={{ marginTop: '10px' }}>
+              Add Ingredient
+            </button>
+          </form>
+
           <input
             type="text"
             placeholder="Search inventory..."
             value={searchTerm}
             onChange={handleSearch}
+            style={{ display: 'block', marginBottom: '10px' }}
           />
+
           <ul>
             {filteredInventory.map((item, index) => (
               <li key={index}>
