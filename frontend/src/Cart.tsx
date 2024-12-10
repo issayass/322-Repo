@@ -2,9 +2,10 @@ import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from './CartContext';
 import './style.css';
+import axiosInstance from './axiosInstance';
 
-const TAX_RATE = 0.1; // 10% tax rate
-const DEFAULT_TIP_PERCENTAGE = 0.15; // 15% tip by default
+const TAX_RATE = 0.1;
+const DEFAULT_TIP_PERCENTAGE = 0.15;
 
 const Cart: React.FC = () => {
   const navigate = useNavigate();
@@ -17,55 +18,49 @@ const Cart: React.FC = () => {
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const taxes = subtotal * TAX_RATE;
   const tip = subtotal * tipPercentage;
-
   const totalBeforeDiscount = subtotal + taxes + tip;
   const totalAfterDiscount = totalBeforeDiscount - discountAmount;
 
   const handleApplyDiscount = () => {
     if (discountCode === 'SAVE10') {
-      setDiscountAmount(totalBeforeDiscount * 0.1); // 10% discount
+      setDiscountAmount(totalBeforeDiscount * 0.1);
     } else {
       alert('Invalid discount code!');
       setDiscountAmount(0);
     }
   };
 
-  const handleIncrement = (itemName: string) => {
-    const item = cartItems.find((item) => item.name === itemName);
-    if (item) 
-    {
-      updateCartItem(itemName, item.quantity + 1); // Increment quantity by 1
+  const handleIncrement = (itemId?: number) => {
+    if (!itemId) return;
+    const item = cartItems.find(ci => ci.id === itemId);
+    if (item) {
+      updateCartItem(itemId, item.quantity + 1);
     }
   };
 
-  const handleDecrement = (itemName: string) => {
-    const item = cartItems.find((item) => item.name === itemName);
-    if (item) 
-    {
-      updateCartItem(itemName, Math.max(1, item.quantity - 1)); // Decrement but not below 1
+  const handleDecrement = (itemId?: number) => {
+    if (!itemId) return;
+    const item = cartItems.find(ci => ci.id === itemId);
+    if (item && item.quantity > 1) {
+      updateCartItem(itemId, item.quantity - 1);
     }
   };
 
-  const handlePlaceOrder = () => {
-    const newOrder = {
-      id: Date.now(), // Unique order ID based on timestamp
-      items: cartItems,
-      subtotal: totalAfterDiscount.toFixed(2),
-      status: 'Pending',
-    };
-
-    // Get existing orders from local storage
-    const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-
-    // Append new order to the list
-    const updatedOrders = [...existingOrders, newOrder];
-
-    // Save updated list to local storage
-    localStorage.setItem('orders', JSON.stringify(updatedOrders));
-
-    // Clear cart and navigate to order notifications
-    clearCart();
-    navigate('/order-notification');
+  const handlePlaceOrder = async () => {
+    try {
+      // We just pick a default status, e.g. "Pending"
+      const response = await axiosInstance.post('/orders', { status: 'Pending' });
+      if (response.status === 201) {
+        // Clear cart after successful order placement
+        await clearCart();
+        navigate('/order-notification');
+      } else {
+        alert('Failed to place order. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error placing order:', error);
+      alert('Failed to place order. Please try again.');
+    }
   };
 
   return (
@@ -83,10 +78,10 @@ const Cart: React.FC = () => {
           <>
             <ul>
               {cartItems.map((item) => (
-                <li key={item.name}>
+                <li key={item.id}>
                   {item.name} x {item.quantity} - ${item.price * item.quantity}
-                  <button id='general-button' onClick={() => handleIncrement(item.name)}>Add</button>
-                  <button id='general-button' onClick={() => handleDecrement(item.name)}>Remove</button>
+                  <button id='general-button' onClick={() => handleIncrement(item.id)}>Add</button>
+                  <button id='general-button' onClick={() => handleDecrement(item.id)}>Remove</button>
                 </li>
               ))}
             </ul>

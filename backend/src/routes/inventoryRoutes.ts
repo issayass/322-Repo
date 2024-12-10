@@ -1,12 +1,7 @@
 import { Router } from 'express';
-import {
-  getAllInventory,
-  createInventory,
-  updateInventory,
-  deleteInventory,
-} from '../controllers/inventoryController';
 import { authenticate } from '../middleware/auth';
 import { requireAdmin } from '../middleware/requireAdmin';
+import { createInventory, updateInventory, deleteInventory, getAllInventory } from '../controllers/inventoryController';
 
 const router = Router();
 

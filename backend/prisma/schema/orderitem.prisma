@@ -1,10 +1,8 @@
-// orderitem.prisma
-
 model OrderItem {
-  id       Int        @id @default(autoincrement())
-  itemID   String     @unique
-  name     String
-  price    Float
-  orders   Order[]
-  CartItem CartItem[]
+  id      Int    @id @default(autoincrement())
+  itemID  String
+  name    String
+  price   Float
+  orderId Int
+  order   Order  @relation(fields: [orderId], references: [id])
 }

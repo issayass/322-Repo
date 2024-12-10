@@ -1,5 +1,3 @@
-// backend/src/services/authService.ts
-
 import bcrypt from 'bcryptjs';
 import prisma from '../utils/prismaClient';
 import { signToken } from '../utils/jwtUtils';
@@ -11,10 +9,9 @@ export const registerUser = async (data: {
 }) => {
   const hashedPassword = await bcrypt.hash(data.password, 10);
 
-  // Check if email ends with '@admin.com'
   const isAdmin = data.email.endsWith('@admin.com');
 
-  return prisma.user.create({
+  const newUser = await prisma.user.create({
     data: {
       email: data.email,
       name: data.name,
@@ -22,6 +19,14 @@ export const registerUser = async (data: {
       isAdmin: isAdmin,
     },
   });
+
+  await prisma.customer.create({
+    data: {
+      userId: newUser.id,
+    },
+  });
+
+  return newUser;
 };
 
 export const loginUser = async (email: string, password: string) => {
@@ -34,7 +39,6 @@ export const loginUser = async (email: string, password: string) => {
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
-
   if (!isPasswordValid) {
     throw new Error('Invalid email or password.');
   }

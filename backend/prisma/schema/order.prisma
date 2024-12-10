@@ -1,5 +1,3 @@
-// order.prisma
-
 model Order {
   id                  Int           @id @default(autoincrement())
   orderDate           DateTime
@@ -8,7 +6,7 @@ model Order {
   customerId          Int
   customer            Customer      @relation(fields: [customerId], references: [id])
   payments            Payment[]
-  orderItems          OrderItem[]
+  orderItems          OrderItem[] // One-to-many relationship with OrderItem
   menuItems           MenuItem[]
   discountCodeId      Int?
   discountCode        DiscountCode? @relation(fields: [discountCodeId], references: [id])

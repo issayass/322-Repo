@@ -2,51 +2,39 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import './style.css';
+import axiosInstance from './axiosInstance';
+
+interface OrderItem {
+  name: string;
+  price: number;
+  quantity: number;
+}
 
 interface Order {
   id: number;
-  items: { name: string; price: number; quantity: number }[];
+  items: OrderItem[];
   subtotal: string;
   status: string;
 }
 
 const OrderNotification: React.FC = () => {
   const navigate = useNavigate();
+  const { role, authToken } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
-  
-  const { role } = useAuth();
+
+  const fetchOrders = async () => {
+    if (!authToken) return;
+    try {
+      const response = await axiosInstance.get('/orders');
+      setOrders(response.data);
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    }
+  };
 
   useEffect(() => {
-    const storedOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-    setOrders(storedOrders);
-  }, []);
-
-  const handleUpdateStatus = (id: number) => {
-  const updatedOrders = orders.map((order) => {
-    if (order.id === id) {
-      let newStatus = order.status;
-      if (order.status === 'Pending') 
-      {
-        newStatus = 'Preparing';
-      }
-      else if (order.status === 'Preparing') 
-      {
-        newStatus = 'Complete';
-      }
-      return { ...order, status: newStatus };
-    }
-    return order;
-  });
-
-  setOrders(updatedOrders);
-  localStorage.setItem('orders', JSON.stringify(updatedOrders));
-  };
-
-  const handleRemove = (orderToRemove: Order) => {
-    const updatedOrders = orders.filter((order) => order.id !== orderToRemove.id);
-    setOrders(updatedOrders);
-    localStorage.setItem('orders', JSON.stringify(updatedOrders));
-  };
+    fetchOrders();
+  }, [authToken]);
 
   return (
     <div id="wrapper">
@@ -60,12 +48,6 @@ const OrderNotification: React.FC = () => {
               <li key={order.id}>
                 <h2>Order #{order.id}</h2>
                 <p>Status: {order.status}</p>
-                {(role !== 'guest' && (
-                  <button id="button-grid-button" onClick={() => handleUpdateStatus(order.id)}>Update</button>
-                ))}
-                {(role === 'admin' && (
-                  <button id='button-grid-button' onClick={() => handleRemove(order)}>Remove</button>
-                ))}
                 <p>Subtotal: ${order.subtotal}</p>
                 <ul>
                   {order.items.map((item, index) => (

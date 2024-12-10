@@ -1,7 +1,9 @@
-
-import React, { createContext, useState, ReactNode } from 'react';
+import React, { createContext, useState, ReactNode, useEffect } from 'react';
+import axiosInstance from './axiosInstance';
+import { useAuth } from './AuthContext';
 
 interface CartItem {
+  id?: number;      // id given from the backend
   name: string;
   price: number;
   quantity: number;
@@ -9,16 +11,18 @@ interface CartItem {
 
 interface CartContextProps {
   cartItems: CartItem[];
-  addToCart: (item: { name: string; price: number }) => void;
-  updateCartItem: (itemName: string, quantity: number) => void;
-  clearCart: () => void;
+  fetchCart: () => Promise<void>;
+  addToCart: (item: { name: string; price: number }) => Promise<void>;
+  updateCartItem: (itemId: number, quantity: number) => Promise<void>;
+  clearCart: () => Promise<void>;
 }
 
 export const CartContext = createContext<CartContextProps>({
   cartItems: [],
-  addToCart: () => {},
-  updateCartItem: () => {},
-  clearCart: () => {},
+  fetchCart: async () => {},
+  addToCart: async () => {},
+  updateCartItem: async () => {},
+  clearCart: async () => {},
 });
 
 interface CartProviderProps {
@@ -27,38 +31,79 @@ interface CartProviderProps {
 
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const { authToken } = useAuth();
 
-  const addToCart = (item: { name: string; price: number }) => {
-    setCartItems((prevCartItems) => {
-      const existingItem = prevCartItems.find((cartItem) => cartItem.name === item.name);
-      if (existingItem) {
-        return prevCartItems.map((cartItem) =>
-          cartItem.name === item.name
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
-            : cartItem
-        );
+  const fetchCart = async () => {
+    if (!authToken) {
+      setCartItems([]);
+      return;
+    }
+    try {
+      const response = await axiosInstance.get('/cart');
+      const cart = response.data;
+      if (cart && cart.cartItems) {
+        setCartItems(cart.cartItems.map((ci: any) => ({
+          id: ci.id,
+          name: ci.name,
+          price: ci.price,
+          quantity: ci.quantity
+        })));
       } else {
-        return [...prevCartItems, { ...item, quantity: 1 }];
+        setCartItems([]);
       }
-    });
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+    }
   };
 
-  const updateCartItem = (itemName: string, quantity: number) => {
-    setCartItems((prevCartItems) =>
-      prevCartItems.map((cartItem) =>
-        cartItem.name === itemName
-          ? { ...cartItem, quantity: Math.max(0, quantity) } // Ensure quantity is non-negative
-          : cartItem
-      ).filter((cartItem) => cartItem.quantity > 0) // Remove items with quantity 0
-    );
+  const addToCart = async (item: { name: string; price: number }) => {
+    if (!authToken) {
+      alert('You must be logged in to add to cart');
+      return;
+    }
+    try {
+      await axiosInstance.post('/cart/item', { name: item.name, price: item.price, quantity: 1 });
+      await fetchCart();
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    }
   };
 
-  const clearCart = () => {
-    setCartItems([]);
+  const updateCartItem = async (itemId: number, quantity: number) => {
+    if (!authToken) {
+      alert('You must be logged in to update cart');
+      return;
+    }
+    try {
+      await axiosInstance.put(`/cart/item/${itemId}`, { quantity });
+      await fetchCart();
+    } catch (error) {
+      console.error('Error updating cart item:', error);
+    }
   };
+
+  const clearCart = async () => {
+    if (!authToken) {
+      return;
+    }
+    try {
+      await axiosInstance.delete('/cart/clear');
+      setCartItems([]);
+    } catch (error) {
+      console.error('Error clearing cart:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (authToken) {
+      fetchCart();
+    } else {
+      setCartItems([]);
+    }
+  }, [authToken]);
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, updateCartItem, clearCart }}>
+    <CartContext.Provider value={{ cartItems, fetchCart, addToCart, updateCartItem, clearCart }}>
       {children}
     </CartContext.Provider>
   );

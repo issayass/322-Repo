@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './style.css'
+import './style.css';
 import axiosInstance from './axiosInstance';
 
 interface InventoryItem {
@@ -19,11 +19,9 @@ const Inventory: React.FC = () => {
   const [restockAmounts, setRestockAmounts] = useState<{ [key: string]: number }>({});
 
   // Fields for adding a new inventory item
-  const [newIngredientID, setNewIngredientID] = useState('');
   const [newName, setNewName] = useState('');
   const [newQuantity, setNewQuantity] = useState<number | ''>('');
   const [newUnitPrice, setNewUnitPrice] = useState<number | ''>('');
-  const [newExpirationDate, setNewExpirationDate] = useState('');
 
   const fetchInventory = async () => {
     try {
@@ -76,32 +74,22 @@ const Inventory: React.FC = () => {
   const handleAddIngredient = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (
-      !newIngredientID.trim() ||
-      !newName.trim() ||
-      newQuantity === '' ||
-      newUnitPrice === '' ||
-      !newExpirationDate.trim()
-    ) {
+    if (!newName.trim() || newQuantity === '' || newUnitPrice === '') {
       alert('Please fill in all fields before adding the ingredient.');
       return;
     }
 
     try {
       await axiosInstance.post('/inventory', {
-        ingredientID: newIngredientID,
         name: newName,
         quantity: Number(newQuantity),
-        unitPrice: Number(newUnitPrice),
-        expirationDate: newExpirationDate,
+        unitPrice: Number(newUnitPrice)
       });
 
       // Reset fields
-      setNewIngredientID('');
       setNewName('');
       setNewQuantity('');
       setNewUnitPrice('');
-      setNewExpirationDate('');
 
       // Refresh inventory
       fetchInventory();
@@ -123,15 +111,6 @@ const Inventory: React.FC = () => {
           {/* Add Inventory Ingredient Form */}
           <form onSubmit={handleAddIngredient} style={{ marginBottom: '20px' }}>
             <h3>Add New Ingredient</h3>
-            <div>
-              <label>Ingredient ID:</label>
-              <input
-                type="text"
-                value={newIngredientID}
-                onChange={(e) => setNewIngredientID(e.target.value)}
-                required
-              />
-            </div>
             <div>
               <label>Name:</label>
               <input
@@ -159,16 +138,6 @@ const Inventory: React.FC = () => {
                 min="0"
                 value={newUnitPrice}
                 onChange={(e) => setNewUnitPrice(e.target.value === '' ? '' : Number(e.target.value))}
-                required
-              />
-            </div>
-            <div>
-              <label>Expiration Date (ISO 8601):</label>
-              <input
-                type="text"
-                placeholder="YYYY-MM-DDTHH:MM:SS.000Z"
-                value={newExpirationDate}
-                onChange={(e) => setNewExpirationDate(e.target.value)}
                 required
               />
             </div>

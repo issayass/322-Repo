@@ -1,6 +1,6 @@
-import type { Request, Response, NextFunction } from 'express';
+import { RequestHandler } from 'express';
 
-export const requireAdmin = (req: Request, res: Response, next: NextFunction) => {
+export const requireAdmin: RequestHandler = (req, res, next) => {
   if (!req.user || !req.user.isAdmin) {
     res.status(403).json({ error: 'Admin privileges required.' });
     return;
